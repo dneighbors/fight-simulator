@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @fighter %>
+
+<div>
+  <%= link_to "Edit this fighter", edit_fighter_path(@fighter) %> |
+  <%= link_to "Back to fighters", fighters_path %>
+
+  <%= button_to "Destroy this fighter", @fighter, method: :delete %>
+</div>
