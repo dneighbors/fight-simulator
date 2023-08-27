@@ -25,7 +25,7 @@ class FightersController < ApplicationController
 
     respond_to do |format|
       if @fighter.save
-        format.html { redirect_to fighter_url(@fighter), notice: "Fighter was successfully created." }
+        format.html { redirect_to fighters_url, notice: "Fighter was successfully created." }
         format.json { render :show, status: :created, location: @fighter }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +38,7 @@ class FightersController < ApplicationController
   def update
     respond_to do |format|
       if @fighter.update(fighter_params)
-        format.html { redirect_to fighter_url(@fighter), notice: "Fighter was successfully updated." }
+        format.html { redirect_to fighters_url, notice: "Fighter was successfully updated." }
         format.json { render :show, status: :ok, location: @fighter }
       else
         format.html { render :edit, status: :unprocessable_entity }
