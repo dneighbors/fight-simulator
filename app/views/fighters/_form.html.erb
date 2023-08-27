@@ -12,51 +12,51 @@
   <% end %>
 
   <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+    <%= form.label :name, class: "label" %>
+    <%= form.text_field :name, class: "input input-bordered" %>
   </div>
 
   <div>
-    <%= form.label :nickname, style: "display: block" %>
-    <%= form.text_field :nickname %>
+    <%= form.label :nickname, class: "label" %>
+    <%= form.text_field :nickname, class: "input input-bordered" %>
   </div>
 
   <div>
-    <%= form.label :birthplace, style: "display: block" %>
-    <%= form.text_field :birthplace %>
+    <%= form.label :birthplace, class: "label" %>
+    <%= form.text_field :birthplace, class: "input input-bordered" %>
   </div>
 
   <div>
-    <%= form.label :punch, style: "display: block" %>
-    <%= form.number_field :punch, readonly: true %>
+    <%= form.label :punch, class: "label" %>
+    <%= form.number_field :punch, readonly: true, class: "input input-bordered" %>
   </div>
 
   <div>
-    <%= form.label :strength, style: "display: block" %>
-    <%= form.number_field :strength, readonly: true %>
+    <%= form.label :strength, class: "label" %>
+    <%= form.number_field :strength, readonly: true, class: "input input-bordered" %>
   </div>
 
   <div>
-    <%= form.label :endurance, style: "display: block" %>
-    <%= form.number_field :endurance, readonly: true %>
+    <%= form.label :endurance, class: "label" %>
+    <%= form.number_field :endurance, readonly: true, class: "input input-bordered" %>
   </div>
 
   <div>
-    <%= form.label :speed, style: "display: block" %>
-    <%= form.number_field :speed, readonly: true %>
+    <%= form.label :speed, class: "label" %>
+    <%= form.number_field :speed, readonly: true, class: "input input-bordered" %>
   </div>
 
   <div>
-    <%= form.label :dexterity, style: "display: block" %>
-    <%= form.number_field :dexterity, readonly: true %>
+    <%= form.label :dexterity, class: "label" %>
+    <%= form.number_field :dexterity, readonly: true, class: "input input-bordered" %>
   </div>
 
   <div>
-    <%= form.label :endurance, style: "display: block" %>
-    <%= form.number_field :endurance, readonly: true %>
+    <%= form.label :endurance, class: "label" %>
+    <%= form.number_field :endurance, readonly: true, class: "input input-bordered" %>
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>
