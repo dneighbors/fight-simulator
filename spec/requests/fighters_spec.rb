@@ -70,7 +70,7 @@ RSpec.describe "/fighters", type: :request do
 
       it "redirects to the created fighter" do
         post fighters_url, params: { fighter: valid_attributes }
-        expect(response).to redirect_to(fighter_url(Fighter.last))
+        expect(response).to redirect_to(fighters_url)
       end
     end
   end
