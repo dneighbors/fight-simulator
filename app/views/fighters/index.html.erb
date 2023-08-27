@@ -1,13 +1,52 @@
 <p style="color: green"><%= notice %></p>
 
-<div id="fighters">
-  <% @fighters.each do |fighter| %>
-    <%= render fighter %>
-    <p>
-      <%= link_to "Show this fighter", fighter %>
-    </p>
-  <% end %>
-</div>
-
 <%= link_to "New fighter", new_fighter_path %>
+
+
+<ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+
+  <% @fighters.each do |fighter| %>
+
+    <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
+      <div class="flex flex-1 flex-col p-8">
+        <%= image_tag("sample_boxer.gif", class: "mx-auto h-32 w-32 flex-shrink-0 rounded-full", alt: fighter.name ) %>
+        <h2 class="mt-6 text-sm font-bold text-gray-900"><%= fighter.name %></h2>
+        <dl class="mt-1 flex flex-grow flex-col justify-between">
+          <dd class="text-sm text-gray-500"><%= fighter.nickname %></dd>
+          <dd class="mt-3">
+            <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Heavyweight</span>
+          </dd>
+        </dl>
+
+
+        <table class="min-w-full divide-y divide-gray-300 mt-5">
+          <tbody class="divide-y divide-gray-200 bg-white">
+          <tr class="divide-x divide-gray-200">
+            <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Punch</td>
+            <td class="whitespace-nowrap p-4 text-sm text-gray-500"><%= fighter.punch %></td>
+          </tr>
+          <tr class="divide-x divide-gray-200">
+            <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Strength</td>
+            <td class="whitespace-nowrap p-4 text-sm text-gray-500"><%= fighter.strength %></td>
+          </tr>
+          <tr class="divide-x divide-gray-200">
+            <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Speed</td>
+            <td class="whitespace-nowrap p-4 text-sm text-gray-500"><%= fighter.speed %></td>
+          </tr>
+          <tr class="divide-x divide-gray-200">
+            <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Dexterity</td>
+            <td class="whitespace-nowrap p-4 text-sm text-gray-500"><%= fighter.dexterity %></td>
+          </tr>
+          <tr class="divide-x divide-gray-200">
+            <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Endurance</td>
+            <td class="whitespace-nowrap p-4 text-sm text-gray-500"><%= fighter.endurance %></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </li>
+  <% end %>
+
+</ul>
+
 
