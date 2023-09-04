@@ -13,10 +13,15 @@ class MatchesController < ApplicationController
   # GET /matches/new
   def new
     @match = Match.new
+    @fighters = Fighter.all
+    @weight_classes = WeightClass.all
   end
 
   # GET /matches/1/edit
   def edit
+    @match = Match.find(params[:id])
+    @fighters = Fighter.all
+    @weight_classes = WeightClass.all
   end
 
   # POST /matches or /matches.json
