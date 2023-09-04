@@ -1,6 +1,6 @@
-<%= form_with(model: weight_class, class: "contents") do |form| %>
+<%= form_with(model: weight_class) do |form| %>
   <% if weight_class.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+    <div style="color: red">
       <h2><%= pluralize(weight_class.errors.count, "error") %> prohibited this weight_class from being saved:</h2>
 
       <ul>
@@ -11,17 +11,20 @@
     </div>
   <% end %>
 
-  <div class="my-5">
-    <%= form.label :name %>
-    <%= form.text_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  <div class="col-span-full">
+    <%= form.label :name, class: "block text-sm font-medium leading-6 text-gray-900" %>
+    <%= form.text_field :name, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
   </div>
 
-  <div class="my-5">
-    <%= form.label :max_weight %>
-    <%= form.number_field :max_weight, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  <div class="col-span-full">
+    <%= form.label :max_weight, class: "block text-sm font-medium leading-6 text-gray-900" %>
+    <%= form.number_field :max_weight, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
   </div>
 
-  <div class="inline">
-    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to weight_classes_url, class: "text-sm font-semibold leading-6 text-gray-900" do %>
+      Cancel
+    <% end %>
+    <%= form.submit class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
   </div>
 <% end %>
