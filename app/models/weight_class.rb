@@ -1,0 +1,2 @@
+class WeightClass < ApplicationRecord
+end

@@ -27,13 +27,15 @@
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <%= link_to fighters_url, class: "bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" do %>
+              <%= link_to fighters_url, class: "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" do %>
                 Fighters
               <% end %>
               <%= link_to matches_url, class: "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" do %>
                 Matches
               <% end %>
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Divisons</a>
+              <%= link_to weight_classes_url, class: "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" do %>
+                Weight Classes
+              <% end %>
             </div>
           </div>
         </div>
