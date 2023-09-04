@@ -1,4 +1,8 @@
 class Fighter < ApplicationRecord
+  has_many :matches_as_fighter_1, class_name: 'Match', foreign_key: 'fighter_1_id'
+  has_many :matches_as_fighter_2, class_name: 'Match', foreign_key: 'fighter_2_id'
+  has_many :won_matches, class_name: 'Match', foreign_key: 'winner_id'
+
   attribute :punch, default: -> { roll_ability }
   attribute :strength, default: -> { roll_ability }
   attribute :speed, default: -> { roll_ability }
