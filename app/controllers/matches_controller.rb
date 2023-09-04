@@ -17,6 +17,11 @@ class MatchesController < ApplicationController
     @weight_classes = WeightClass.all
   end
 
+  # GET /matches/1/fight
+  def fight
+    @match = Match.find(params[:id])
+  end
+
   # GET /matches/1/edit
   def edit
     @match = Match.find(params[:id])
