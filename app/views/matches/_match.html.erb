@@ -1,0 +1,42 @@
+<div id="<%= dom_id match %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Rounds:</strong>
+    <%= match.rounds %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Fighter 1:</strong>
+    <%= match.fighter_1_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Fighter 2:</strong>
+    <%= match.fighter_2_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Status:</strong>
+    <%= match.status_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Winner:</strong>
+    <%= match.winner_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Result:</strong>
+    <%= match.result_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Weight class:</strong>
+    <%= match.weight_class_id %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this match", match, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to 'Edit this match', edit_match_path(match), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <hr class="mt-6">
+  <% end %>
+</div>
