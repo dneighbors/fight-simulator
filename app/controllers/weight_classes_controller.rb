@@ -25,7 +25,7 @@ class WeightClassesController < ApplicationController
 
     respond_to do |format|
       if @weight_class.save
-        format.html { redirect_to weight_class_url(@weight_class), notice: "Weight class was successfully created." }
+        format.html { redirect_to weight_classes_url, notice: "Weight class was successfully created." }
         format.json { render :show, status: :created, location: @weight_class }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +38,7 @@ class WeightClassesController < ApplicationController
   def update
     respond_to do |format|
       if @weight_class.update(weight_class_params)
-        format.html { redirect_to weight_class_url(@weight_class), notice: "Weight class was successfully updated." }
+        format.html { redirect_to weight_classes_url, notice: "Weight class was successfully updated." }
         format.json { render :show, status: :ok, location: @weight_class }
       else
         format.html { render :edit, status: :unprocessable_entity }
