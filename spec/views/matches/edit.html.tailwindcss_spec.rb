@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "matches/edit", type: :view do
   let(:match) {
     Match.create!(
-      rounds: 1,
+      max_rounds: 1,
       fighter_1_id: 1,
       fighter_2_id: 1,
       status_id: 1,
@@ -22,7 +22,7 @@ RSpec.describe "matches/edit", type: :view do
 
     assert_select "form[action=?][method=?]", match_path(match), "post" do
 
-      assert_select "input[name=?]", "match[rounds]"
+      assert_select "input[name=?]", "match[max_rounds]"
 
       assert_select "input[name=?]", "match[fighter_1_id]"
 

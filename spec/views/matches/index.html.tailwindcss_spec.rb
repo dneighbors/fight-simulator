@@ -4,7 +4,7 @@ RSpec.describe "matches/index", type: :view do
   before(:each) do
     assign(:matches, [
       Match.create!(
-        rounds: 2,
+        max_rounds: 2,
         fighter_1_id: 3,
         fighter_2_id: 4,
         status_id: 5,
@@ -13,7 +13,7 @@ RSpec.describe "matches/index", type: :view do
         weight_class_id: 8
       ),
       Match.create!(
-        rounds: 2,
+        max_rounds: 2,
         fighter_1_id: 3,
         fighter_2_id: 4,
         status_id: 5,

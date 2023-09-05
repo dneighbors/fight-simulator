@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "matches/new", type: :view do
   before(:each) do
     assign(:match, Match.new(
-      rounds: 1,
+      max_rounds: 1,
       fighter_1_id: 1,
       fighter_2_id: 1,
       status_id: 1,
@@ -18,7 +18,7 @@ RSpec.describe "matches/new", type: :view do
 
     assert_select "form[action=?][method=?]", matches_path, "post" do
 
-      assert_select "input[name=?]", "match[rounds]"
+      assert_select "input[name=?]", "match[max_rounds]"
 
       assert_select "input[name=?]", "match[fighter_1_id]"
 

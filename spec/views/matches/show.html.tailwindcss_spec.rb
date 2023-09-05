@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "matches/show", type: :view do
   before(:each) do
     assign(:match, Match.create!(
-      rounds: 2,
+      max_rounds: 2,
       fighter_1_id: 3,
       fighter_2_id: 4,
       status_id: 5,
