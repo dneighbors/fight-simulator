@@ -5,6 +5,9 @@ class Match < ApplicationRecord
   belongs_to :weight_class
   has_many :rounds
 
+  enum status_id: { pending: 0, completed: 1 }
+  after_initialize :set_default_status, if: :new_record?
+
   def self.roll_d20
     rand(1..20)
   end
@@ -143,7 +146,7 @@ class Match < ApplicationRecord
       # It's a draw, set winner_id to nil or handle accordingly
       self.winner_id = nil
     end
-
+    self.completed!
     # Save the match with the final scores and winner_id set
     self.save
   end
@@ -151,8 +154,15 @@ class Match < ApplicationRecord
   def reset_match
     self.fighter_1_final_score = nil
     self.fighter_2_final_score = nil
+    self.status_id = 0
     self.winner_id = nil
     self.rounds.destroy_all
     self.save
+  end
+
+  private
+
+  def set_default_status
+    self.status_id ||= 0
   end
 end
