@@ -44,4 +44,11 @@ class Fighter < ApplicationRecord
     # Count matches where the fighter participated, match is completed, and there's no winner
     Match.where("(fighter_1_id = ? OR fighter_2_id = ?) AND winner_id IS NULL AND status_id = 1", self.id, self.id).count
   end
+
+  def self.reset_endurance
+    Fighter.all.each do |fighter|
+      fighter.reset_endurance
+      fighter.save
+    end
+  end
 end

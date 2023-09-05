@@ -70,7 +70,7 @@ class Match < ApplicationRecord
   def end_match(offensive_fighter, defensive_fighter, round, damage)
     self.winner = offensive_fighter
     self.ko!
-    "#{defensive_fighter.name} HAS BEEN KNOCKED OUT and takes #{damage} damage."
+    "HAS KNOCKED OUT #{defensive_fighter.name} inflicting #{damage} damage."
   end
 
   def score_round(round, fighter_number, damage)
@@ -198,6 +198,12 @@ class Match < ApplicationRecord
     self.winner_id = nil
     self.rounds.destroy_all
     self.save
+  end
+
+  def self.reset_all_matches
+    Match.all.each do |match|
+      match.reset_match
+    end
   end
 
 end
