@@ -11,22 +11,28 @@
 <main>
   <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
     <% (1..4).each do |round| %>
+      <% new_round = @match.rounds.build(round_number: round) %>
       <h2 class="text-lg font-medium leading-5 text-gray-800 py-2">Round <%= round %></h2>
 
       <div class="flex items-center py-2">
         <%= image_tag("sample_boxer.gif", class: "w-10 h-10 rounded-full", alt: @match.fighter_1.name) %>
         <span class="ml-4 text-gray-700">
-          <%= "#{@match.fighter_1.name} #{@match.punch(@match.fighter_1, @match.fighter_2)}" %>
+          <%= "#{@match.fighter_1.name} #{@match.punch(@match.fighter_1, @match.fighter_2, new_round, 1)}" %>
         </span>
       </div>
 
       <div class="flex items-center py-2">
         <%= image_tag("sample_boxer.gif", class: "w-10 h-10 rounded-full", alt: @match.fighter_2.name) %>
         <span class="ml-4 text-gray-700">
-          <%= "#{@match.fighter_2.name} #{@match.punch(@match.fighter_2, @match.fighter_1)}" %>
+          <%= "#{@match.fighter_2.name} #{@match.punch(@match.fighter_2, @match.fighter_1, new_round, 2)}" %>
         </span>
       </div>
-
+      Round Score: <%= "#{@match.fighter_1.name} : #{new_round.fighter_1_points} - #{@match.fighter_2.name} : #{new_round.fighter_2_points}" %>
     <% end %>
+    <% @match.score_match %>
+    <h2 class="text-lg font-medium leading-5 text-gray-800 py-2">Match Score</h2>
+    Winner: <%= @match.winner.name %>
+    <%= @match.fighter_1.name %> : <%= @match.fighter_1_final_score %>
+    <%= @match.fighter_2.name %> : <%= @match.fighter_2_final_score %>
   </div>
 </main>
