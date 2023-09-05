@@ -3,6 +3,8 @@ class Match < ApplicationRecord
   belongs_to :fighter_2, class_name: 'Fighter'
   belongs_to :winner, class_name: 'Fighter', optional: true  # Winner is optional because a match might not be finished yet
   belongs_to :weight_class
+  has_many :rounds
+
 
 
   def self.roll_d20
@@ -24,6 +26,7 @@ class Match < ApplicationRecord
     when 16..18
       "solid head shot. #{defensive_fighter.name} takes #{damage} damage."
     when 19..20
+      determine_knockdown(defensive_fighter, damage)
       "knock out blow. #{defensive_fighter.name} takes #{damage} damage."
     else
       "WTF?"
@@ -37,6 +40,27 @@ class Match < ApplicationRecord
     damage
   end
 
+  def determine_knockdown(defensive_fighter, damage)
+    case defensive_fighter.speed
+    when 3..13
+      true
+    when 14..17
+      if rand(1..100) > 50
+        false
+      else
+        true
+      end
+    when 18..30
+      if ((damage > 10) && (rand(1..100) < 40) || defensive_fighter.endurance < 20)
+        true
+      else
+        false
+      end
+    else
+      false
+    end
+
+  end
   def dexterity_modifier(defensive_fighter)
     case defensive_fighter.dexterity
     when 1..9
