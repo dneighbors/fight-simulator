@@ -13,6 +13,7 @@ class Match < ApplicationRecord
   def set_default_status
     self.status_id ||= 0
   end
+
   def self.roll_d20
     rand(1..20)
   end
@@ -84,33 +85,32 @@ class Match < ApplicationRecord
     defensive_fighter.save!
   end
 
-end
+  def calculate_damage(offensive_fighter, defensive_fighter)
+    damage = punch_strength(offensive_fighter)
+    damage_modifier = dexterity_modifier(defensive_fighter)
+    damage = (damage * damage_modifier).round
+    damage
+  end
 
-def calculate_damage(offensive_fighter, defensive_fighter)
-  damage = punch_strength(offensive_fighter)
-  damage_modifier = dexterity_modifier(defensive_fighter)
-  damage = (damage * damage_modifier).round
-  damage
-end
-
-def determine_knockout(defensive_fighter, damage)
-  case defensive_fighter.speed
-  when 3..13
-    true
-  when 14..17
-    if rand(1..100) > 50
-      false
-    else
+  def determine_knockout(defensive_fighter, damage)
+    case defensive_fighter.speed
+    when 3..13
       true
-    end
-  when 18..30
-    if ((damage > 10) && (rand(1..100) < 40) || defensive_fighter.endurance < 20)
-      true
+    when 14..17
+      if rand(1..100) > 50
+        false
+      else
+        true
+      end
+    when 18..30
+      if ((damage > 10) && (rand(1..100) < 40) || defensive_fighter.endurance < 20)
+        true
+      else
+        false
+      end
     else
       false
     end
-  else
-    false
   end
 
   def dexterity_modifier(defensive_fighter)
@@ -199,6 +199,5 @@ def determine_knockout(defensive_fighter, damage)
     self.rounds.destroy_all
     self.save
   end
-
 
 end
