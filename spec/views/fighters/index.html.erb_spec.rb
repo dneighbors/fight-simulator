@@ -11,7 +11,8 @@ RSpec.describe "fighters/index", type: :view do
         strength: 3,
         speed: 4,
         dexterity: 5,
-        endurance: 6
+        base_endurance: 6,
+        endurance: 7
       ),
       Fighter.create!(
         name: "Name",
@@ -21,6 +22,7 @@ RSpec.describe "fighters/index", type: :view do
         strength: 3,
         speed: 4,
         dexterity: 5,
+        base_endurance: 6,
         endurance: 6
       )
     ])

@@ -23,9 +23,10 @@ RSpec.describe "/fighters", type: :request do
     birthplace: "Hells Kitchen",
     punch: 15,
     strength: 15,
-    endurance: 100,
+    base_endurance: 100,
     speed: 15,
-    dexterity: 15
+    dexterity: 15,
+    endurance: 100
   }
 
 

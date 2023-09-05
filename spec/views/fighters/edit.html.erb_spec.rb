@@ -8,7 +8,7 @@ RSpec.describe "fighters/edit", type: :view do
       birthplace: "MyString",
       punch: 1,
       strength: 1,
-      endurance: 1,
+      base_endurance: 1,
       speed: 1,
       dexterity: 1,
       endurance: 1
@@ -34,13 +34,13 @@ RSpec.describe "fighters/edit", type: :view do
 
       assert_select "input[name=?]", "fighter[strength]"
 
-      assert_select "input[name=?]", "fighter[endurance]"
+      assert_select "input[name=?]", "fighter[base_endurance]"
 
       assert_select "input[name=?]", "fighter[speed]"
 
       assert_select "input[name=?]", "fighter[dexterity]"
 
-      assert_select "input[name=?]", "fighter[endurance]"
+      assert_select "input[name=?]", "fighter[base_endurance]"
     end
   end
 end
