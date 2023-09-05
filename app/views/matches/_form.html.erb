@@ -27,10 +27,12 @@
     <%= form.collection_select :fighter_2_id, @fighters, :id, :name, {}, { class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" } %>
   </div>
 
+
   <div class="col-span-full">
     <%= form.label :status_id, class: "block text-sm font-medium leading-6 text-gray-900" %>
-    <%= form.number_field :status_id, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+    <%= form.select :status_id, Match.status_ids.keys.map { |status| [status.humanize, Match.status_ids[status].to_s] }, {}, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
   </div>
+
 
   <div class="col-span-full">
     <%= form.label :winner_id, class: "block text-sm font-medium leading-6 text-gray-900" %>

@@ -31,6 +31,8 @@ class MatchesController < ApplicationController
 
   # POST /matches or /matches.json
   def create
+    params[:match][:status_id] = params[:match][:status_id].to_i if params[:match][:status_id].present?
+    puts params[:match][:status_id]
     @match = Match.new(match_params)
 
     respond_to do |format|
