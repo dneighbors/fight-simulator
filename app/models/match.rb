@@ -6,8 +6,13 @@ class Match < ApplicationRecord
   has_many :rounds
 
   enum status_id: { pending: 0, completed: 1 }
+  enum result_id: { decision: 0, tko: 1, ko: 2 }
+
   after_initialize :set_default_status, if: :new_record?
 
+  def set_default_status
+    self.status_id ||= 0
+  end
   def self.roll_d20
     rand(1..20)
   end
@@ -23,22 +28,48 @@ class Match < ApplicationRecord
       "missed."
     when 6..10
       score_round(round, fighter_number, damage)
-      "landed a body blow. #{defensive_fighter.name} takes #{damage} damage."
+      reduce_health(defensive_fighter, damage)
+      if defensive_fighter.endurance <= 0
+        end_match(offensive_fighter, defensive_fighter, round, damage)
+      else
+        "landed a body blow. #{defensive_fighter.name} takes #{damage} damage."
+      end
     when 11..15
       score_round(round, fighter_number, damage)
-      "stuck a jab. #{defensive_fighter.name} takes #{damage} damage."
+      reduce_health(defensive_fighter, damage)
+      if defensive_fighter.endurance <= 0
+        end_match(offensive_fighter, defensive_fighter, round, damage)
+      else
+        "stuck a jab. #{defensive_fighter.name} takes #{damage} damage."
+      end
     when 16..18
       score_round(round, fighter_number, damage)
-      "solid head shot. #{defensive_fighter.name} takes #{damage} damage."
+      reduce_health(defensive_fighter, damage)
+      if defensive_fighter.endurance <= 0
+        end_match(offensive_fighter, defensive_fighter, round, damage)
+      else
+        "solid head shot. #{defensive_fighter.name} takes #{damage} damage."
+      end
     when 19..20
-      knock_down = determine_knockdown(defensive_fighter, damage)
-      round.fighter_1_knockdowns += 1 if (fighter_number == 1 && knock_down)
-      round.fighter_2_knockdowns += 1 if (fighter_number == 2 && knock_down)
+      reduce_health(defensive_fighter, damage)
+      round.fighter_1_knockdowns += 1 if fighter_number == 1
+      round.fighter_2_knockdowns += 1 if fighter_number == 2
+      knockout = determine_knockout(defensive_fighter, damage)
       score_round(round, fighter_number, damage)
-      knock_down ? "KNOCKED #{defensive_fighter.name} DOWN. #{defensive_fighter.name} takes #{damage} damage." : "hit to the head. #{defensive_fighter.name} takes #{damage} damage."
+      if knockout
+        end_match(offensive_fighter, defensive_fighter, round, damage)
+      else
+        "KNOCKED #{defensive_fighter.name} DOWN. #{defensive_fighter.name} takes #{damage} damage."
+      end
     else
       "WTF?"
     end
+  end
+
+  def end_match(offensive_fighter, defensive_fighter, round, damage)
+    self.winner = offensive_fighter
+    self.ko!
+    "#{defensive_fighter.name} HAS BEEN KNOCKED OUT and takes #{damage} damage."
   end
 
   def score_round(round, fighter_number, damage)
@@ -47,33 +78,39 @@ class Match < ApplicationRecord
     round.save
   end
 
-  def calculate_damage(offensive_fighter, defensive_fighter)
-    damage = punch_strength(offensive_fighter)
-    damage_modifier = dexterity_modifier(defensive_fighter)
-    damage = (damage * damage_modifier).round
-    damage
+  def reduce_health(defensive_fighter, damage)
+    defensive_fighter.endurance -= damage
+    defensive_fighter.endurance = 0 if defensive_fighter.endurance < 0
+    defensive_fighter.save!
   end
 
-  def determine_knockdown(defensive_fighter, damage)
-    case defensive_fighter.speed
-    when 3..13
+end
+
+def calculate_damage(offensive_fighter, defensive_fighter)
+  damage = punch_strength(offensive_fighter)
+  damage_modifier = dexterity_modifier(defensive_fighter)
+  damage = (damage * damage_modifier).round
+  damage
+end
+
+def determine_knockout(defensive_fighter, damage)
+  case defensive_fighter.speed
+  when 3..13
+    true
+  when 14..17
+    if rand(1..100) > 50
+      false
+    else
       true
-    when 14..17
-      if rand(1..100) > 50
-        false
-      else
-        true
-      end
-    when 18..30
-      if ((damage > 10) && (rand(1..100) < 40) || defensive_fighter.endurance < 20)
-        true
-      else
-        false
-      end
+    end
+  when 18..30
+    if ((damage > 10) && (rand(1..100) < 40) || defensive_fighter.endurance < 20)
+      true
     else
       false
     end
-
+  else
+    false
   end
 
   def dexterity_modifier(defensive_fighter)
@@ -138,14 +175,17 @@ class Match < ApplicationRecord
     self.fighter_2_final_score = fighter_2_total_points
 
     # Determine the winner based on total points
+
     if fighter_1_total_points > fighter_2_total_points
-      self.winner_id = self.fighter_1_id
+      self.winner_id ||= self.fighter_1_id
     elsif fighter_2_total_points > fighter_1_total_points
-      self.winner_id = self.fighter_2_id
+      self.winner_id ||= self.fighter_2_id
     else
       # It's a draw, set winner_id to nil or handle accordingly
-      self.winner_id = nil
+      self.winner_id ||= nil
     end
+    self.decision! if self.result_id.nil?
+
     self.completed!
     # Save the match with the final scores and winner_id set
     self.save
@@ -160,9 +200,5 @@ class Match < ApplicationRecord
     self.save
   end
 
-  private
 
-  def set_default_status
-    self.status_id ||= 0
-  end
 end
