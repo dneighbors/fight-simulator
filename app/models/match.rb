@@ -35,7 +35,7 @@ class Match < ApplicationRecord
       round.fighter_1_knockdowns += 1 if (fighter_number == 1 && knock_down)
       round.fighter_2_knockdowns += 1 if (fighter_number == 2 && knock_down)
       score_round(round, fighter_number, damage)
-      "insanely hard hit to the head. #{defensive_fighter.name} takes #{damage} damage."
+      knock_down ? "KNOCKED #{defensive_fighter.name} DOWN. #{defensive_fighter.name} takes #{damage} damage." : "hit to the head. #{defensive_fighter.name} takes #{damage} damage."
     else
       "WTF?"
     end
