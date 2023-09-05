@@ -9,6 +9,16 @@ class Fighter < ApplicationRecord
   attribute :dexterity, default: -> { roll_ability }
   attribute :base_endurance, default: -> { roll_base_endurance }
 
+  after_initialize :set_endurance
+
+  def set_endurance
+    self.endurance ||= self.base_endurance
+  end
+
+  def reset_endurance
+    self.endurance = self.base_endurance
+  end
+
   def self.roll_ability
     dice = Array.new(4) { rand(1..6) }  # Roll four dice and store their results
     ability_score = dice.sort.last(3).sum
