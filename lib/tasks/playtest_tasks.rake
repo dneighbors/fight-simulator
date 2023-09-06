@@ -1,0 +1,62 @@
+namespace :playtest do
+  namespace :reset do
+    desc "Reset all matches"
+    task matches: :environment do
+      Match.reset_all_matches
+    end
+
+    desc "Reset all fighter endurance scores"
+    task endurance: :environment do
+      Match.reset_all_matches
+    end
+  end
+
+  namespace :create do
+    desc "Creates a random match"
+    task match: :environment do
+      fighter_ids = Fighter.pluck(:id)
+      random_fighter_ids = fighter_ids.sample(2)
+      random_fighters = Fighter.find(random_fighter_ids)
+      weight_class_ids = WeightClass.pluck(:id)
+      random_weight_class = weight_class_ids.sample(1)
+      weight_class = WeightClass.find(random_weight_class)
+
+      available_rounds = [4, 6, 8, 15]
+      max_rounds = available_rounds.sample
+      Match.create!(fighter_1: random_fighters[0], fighter_2: random_fighters[1], max_rounds: max_rounds, status_id: 0, weight_class_id: weight_class[0].id)
+    end
+  end
+
+  namespace :play do
+    desc "Play all matches in the database"
+    task matches: :environment do
+      Match.all.each do |match|
+        match.training
+        rounds = match.max_rounds || 4
+        (1..rounds).each do |round|
+          if match.winner_id.nil?
+            new_round = match.rounds.build(round_number: round)
+            match.punch(match.fighter_1, match.fighter_2, new_round, 1)
+            match.punch(match.fighter_2, match.fighter_1, new_round, 2)
+            puts "Round Score: #{match.fighter_1.name} : #{new_round.fighter_1_points} - #{match.fighter_2.name} : #{new_round.fighter_2_points}"
+          end
+        end
+        match.score_match
+        match.training
+
+        if match.winner_id.nil?
+          puts "Match is a draw!"
+        else
+          puts "Winner: #{match.winner&.name}"
+        end
+        puts "#{match.fighter_1.name} : #{match.fighter_1_final_score}"
+        puts "#{match.fighter_2.name} : #{match.fighter_2_final_score}"
+      end
+    end
+  end
+
+end
+
+
+
+
