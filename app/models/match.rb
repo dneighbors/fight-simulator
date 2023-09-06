@@ -19,6 +19,8 @@ class Match < ApplicationRecord
   end
 
   def punch(offensive_fighter, defensive_fighter, round, fighter_number)
+
+    return "#{offensive_fighter.name} lays on mat lifeless." if winner_id.present?
     roll = Match.roll_d20
 
     damage = calculate_damage(offensive_fighter, defensive_fighter)
@@ -184,7 +186,7 @@ class Match < ApplicationRecord
       # It's a draw, set winner_id to nil or handle accordingly
       self.winner_id ||= nil
     end
-    self.decision! if self.result_id.nil?
+    self.decision! unless self.ko?
 
     self.completed!
     # Save the match with the final scores and winner_id set
