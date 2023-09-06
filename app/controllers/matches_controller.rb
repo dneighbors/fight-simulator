@@ -48,6 +48,9 @@ class MatchesController < ApplicationController
 
   # PATCH/PUT /matches/1 or /matches/1.json
   def update
+    params[:match][:status_id] = params[:match][:status_id].to_i if params[:match][:status_id].present?
+    puts params[:match][:status_id]
+
     respond_to do |format|
       if @match.update(match_params)
         format.html { redirect_to matches_url, notice: "Match was successfully updated." }

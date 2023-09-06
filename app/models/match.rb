@@ -9,7 +9,11 @@ class Match < ApplicationRecord
   enum result_id: { decision: 0, tko: 1, ko: 2 }
 
   after_initialize :set_default_status, if: :new_record?
+  after_initialize :set_default_rounds, if: :new_record?
 
+  def set_default_rounds
+    self.max_rounds ||= 4
+  end
   def set_default_status
     self.status_id ||= 0
   end
