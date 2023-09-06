@@ -10,7 +10,7 @@
 
 <main>
   <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-    <% (1..15).each do |round| %>
+    <% (1..4).each do |round| %>
       <% if @match.winner_id.nil? %>
       <% new_round = @match.rounds.build(round_number: round) %>
       <h2 class="text-lg font-medium leading-5 text-gray-800 py-2">Round <%= round %></h2>
