@@ -202,6 +202,11 @@ class Match < ApplicationRecord
     self.save
   end
 
+  def training
+    self.fighter_1.update_endurance
+    self.fighter_2.update_endurance
+  end
+
   def self.reset_all_matches
     Match.all.each do |match|
       match.reset_match

@@ -47,6 +47,13 @@ class Fighter < ApplicationRecord
   def knockouts
     won_matches.where(result_id: Match.result_ids['ko']).count
   end
+
+  def update_endurance
+    additional_endurance = Fighter.roll_base_endurance
+    new_endurance = self.endurance + additional_endurance
+    self.endurance = [new_endurance, self.base_endurance].min
+    self.save!
+  end
   def self.reset_endurance
     Fighter.all.each do |fighter|
       fighter.reset_endurance
