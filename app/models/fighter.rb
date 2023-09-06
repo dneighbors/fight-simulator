@@ -51,9 +51,14 @@ class Fighter < ApplicationRecord
   def update_endurance
     additional_endurance = Fighter.roll_base_endurance
     new_endurance = self.endurance + additional_endurance
-    self.endurance = [new_endurance, self.base_endurance].min
+    if new_endurance > self.base_endurance
+      self.endurance = self.base_endurance
+    else
+      self.endurance = new_endurance
+    end
     self.save!
   end
+
   def self.reset_endurance
     Fighter.all.each do |fighter|
       fighter.reset_endurance
