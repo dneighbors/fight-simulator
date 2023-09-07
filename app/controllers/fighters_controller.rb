@@ -13,10 +13,12 @@ class FightersController < ApplicationController
   # GET /fighters/new
   def new
     @fighter = Fighter.new
+    @weight_classes = WeightClass.all
   end
 
   # GET /fighters/1/edit
   def edit
+    @weight_classes = WeightClass.all
   end
 
   # POST /fighters or /fighters.json
@@ -65,6 +67,6 @@ class FightersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def fighter_params
-      params.require(:fighter).permit(:name, :nickname, :birthplace, :punch, :strength, :speed, :dexterity, :base_endurance, :endurance, :weight)
+      params.require(:fighter).permit(:name, :nickname, :birthplace, :punch, :strength, :speed, :dexterity, :base_endurance, :endurance, :weight, :weight_class_id)
     end
 end
