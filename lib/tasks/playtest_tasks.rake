@@ -12,18 +12,37 @@ namespace :playtest do
   end
 
   namespace :create do
-    desc "Creates a random match"
-    task match: :environment do
-      fighter_ids = Fighter.pluck(:id)
-      random_fighter_ids = fighter_ids.sample(2)
-      random_fighters = Fighter.find(random_fighter_ids)
-      weight_class_ids = WeightClass.pluck(:id)
-      random_weight_class = weight_class_ids.sample(1)
-      weight_class = WeightClass.find(random_weight_class)
+    desc "Creates 5 random matches per weight class"
+    task matches: :environment do
+      weight_classes = WeightClass.all
 
-      available_rounds = [4, 6, 8, 15]
-      max_rounds = available_rounds.sample
-      Match.create!(fighter_1: random_fighters[0], fighter_2: random_fighters[1], max_rounds: max_rounds, status_id: 0, weight_class_id: weight_class[0].id)
+      weight_classes.each do |weight_class|
+        5.times do
+          fighters_in_weight_class = Fighter.where(weight_class: weight_class).pluck(:id)
+
+          # If not enough fighters in this weight class for a match, skip
+          if fighters_in_weight_class.length < 2
+            puts "Not enough fighters in #{weight_class.name}. Skipping..."
+            next
+          end
+
+          random_fighter_ids = fighters_in_weight_class.sample(2)
+          random_fighters = Fighter.find(random_fighter_ids)
+
+          available_rounds = [4, 6, 8, 15]
+          max_rounds = available_rounds.sample
+
+          Match.create!(
+            fighter_1: random_fighters[0],
+            fighter_2: random_fighters[1],
+            max_rounds: max_rounds,
+            status_id: 0,
+            weight_class: weight_class
+          )
+
+          puts "Match created for #{weight_class.name}"
+        end
+      end
     end
   end
 
