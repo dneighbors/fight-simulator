@@ -27,6 +27,29 @@ namespace :playtest do
     end
   end
 
+  namespace :create do
+    desc "Creates weight classes"
+    task weight_classes: :environment do
+      WeightClass.create!(name: "Minimumweight", max_weight: 105)
+      WeightClass.create!(name: "Light Flyweight", max_weight: 108)
+      WeightClass.create!(name: "Flyweight", max_weight: 112)
+      WeightClass.create!(name: "Super Flyweight", max_weight: 115)
+      WeightClass.create!(name: "Bantamweight", max_weight: 118)
+      WeightClass.create!(name: "Super Bantamweight", max_weight: 122)
+      WeightClass.create!(name: "Featherweight", max_weight: 126)
+      WeightClass.create!(name: "Super Featherweight", max_weight: 130)
+      WeightClass.create!(name: "Lightweight", max_weight: 135)
+      WeightClass.create!(name: "Super Lightweight", max_weight: 140)
+      WeightClass.create!(name: "Welterweight", max_weight: 147)
+      WeightClass.create!(name: "Super Welterweight ", max_weight: 154)
+      WeightClass.create!(name: "Middleweight", max_weight: 160)
+      WeightClass.create!(name: "Super Middleweight", max_weight: 168)
+      WeightClass.create!(name: "Light Heavyweight", max_weight: 175)
+      WeightClass.create!(name: "Cruiserweight", max_weight: 200)
+      WeightClass.create!(name: "Heavyweight", max_weight: 500)
+    end
+  end
+
   namespace :play do
     desc "Play all matches in the database"
     task matches: :environment do
