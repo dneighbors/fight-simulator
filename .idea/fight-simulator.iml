@@ -48,6 +48,7 @@
     <orderEntry type="library" scope="PROVIDED" name="debug (v1.8.0, rbenv: 3.2.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="diff-lcs (v1.5.0, rbenv: 3.2.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="erubi (v1.12.0, rbenv: 3.2.2) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="faker (v3.2.1, rbenv: 3.2.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="globalid (v1.1.0, rbenv: 3.2.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="i18n (v1.14.1, rbenv: 3.2.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="importmap-rails (v1.2.1, rbenv: 3.2.2) [gem]" level="application" />
@@ -401,6 +402,27 @@
             </subtasks>
           </RakeTaskImpl>
           <RakeTaskImpl description="Prints out your Rack middleware stack" fullCommand="middleware" id="middleware" />
+          <RakeTaskImpl id="playtest">
+            <subtasks>
+              <RakeTaskImpl id="create">
+                <subtasks>
+                  <RakeTaskImpl description="Creates a random match" fullCommand="playtest:create:match" id="match" />
+                  <RakeTaskImpl description="Creates weight classes" fullCommand="playtest:create:weight_classes" id="weight_classes" />
+                </subtasks>
+              </RakeTaskImpl>
+              <RakeTaskImpl id="play">
+                <subtasks>
+                  <RakeTaskImpl description="Play all matches in the database" fullCommand="playtest:play:matches" id="matches" />
+                </subtasks>
+              </RakeTaskImpl>
+              <RakeTaskImpl id="reset">
+                <subtasks>
+                  <RakeTaskImpl description="Reset all fighter endurance scores" fullCommand="playtest:reset:endurance" id="endurance" />
+                  <RakeTaskImpl description="Reset all matches" fullCommand="playtest:reset:matches" id="matches" />
+                </subtasks>
+              </RakeTaskImpl>
+            </subtasks>
+          </RakeTaskImpl>
           <RakeTaskImpl description="Restart app by touching tmp/restart.txt" fullCommand="restart" id="restart" />
           <RakeTaskImpl description="Generate a cryptographically secure secret key (this is typically used to generate a secret for cookie sessions)" fullCommand="secret" id="secret" />
           <RakeTaskImpl description="Run all specs in spec directory (excluding plugin specs)" fullCommand="spec" id="spec" />

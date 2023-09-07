@@ -50,6 +50,27 @@ namespace :playtest do
     end
   end
 
+  namespace :destroy do
+    desc "Destroy all fighters and matches and rounds"
+    task all: :environment do
+      Round.destroy_all
+      Match.destroy_all
+      Fighter.destroy_all
+    end
+  end
+  namespace :create do
+    desc 'Generate 100 random fighters'
+    task fighters: :environment do
+      100.times do
+        Fighter.create!(
+          name: Faker::Name.male_first_name + ' ' + Faker::Name.last_name,
+          nickname: Faker::Superhero.name,
+          birthplace: Faker::Address.city,
+        )
+      end
+    end
+  end
+
   namespace :play do
     desc "Play all matches in the database"
     task matches: :environment do
