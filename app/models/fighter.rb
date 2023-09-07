@@ -62,6 +62,15 @@ class Fighter < ApplicationRecord
     won_matches.where(result_id: Match.result_ids['ko']).count
   end
 
+  def winning_percentage
+    total_matches = wins + losses + draws
+
+    # Guard clause to prevent division by zero
+    return 0.0 if total_matches == 0
+
+    (wins.to_f / total_matches).round(3)
+  end
+
   def update_endurance
     additional_endurance = Fighter.roll_base_endurance
     new_endurance = self.endurance + additional_endurance
