@@ -13,11 +13,15 @@ class Fighter < ApplicationRecord
   attribute :base_endurance, default: -> { roll_base_endurance }
 
   after_initialize :set_endurance
+  after_initialize :set_weight_class
 
   def set_endurance
     self.endurance ||= self.base_endurance
   end
 
+  def set_weight_class
+    self.weight_class ||= WeightClass.find_highest_class_for_weight(self.weight)
+  end
   def reset_endurance
     self.endurance = self.base_endurance
   end
