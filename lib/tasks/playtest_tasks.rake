@@ -12,35 +12,36 @@ namespace :playtest do
   end
 
   namespace :create do
-    desc "Creates 5 random matches per weight class"
+    desc "Creates a match for every fighter against every other fighter in the same weight class"
     task matches: :environment do
       weight_classes = WeightClass.all
 
       weight_classes.each do |weight_class|
-        5.times do
-          fighters_in_weight_class = Fighter.where(weight_class: weight_class).pluck(:id)
+        fighters_in_weight_class = Fighter.where(weight_class: weight_class).pluck(:id)
 
-          # If not enough fighters in this weight class for a match, skip
-          if fighters_in_weight_class.length < 2
-            puts "Not enough fighters in #{weight_class.name}. Skipping..."
-            next
-          end
+        # If not enough fighters in this weight class for a match, skip
+        if fighters_in_weight_class.length < 2
+          puts "Not enough fighters in #{weight_class.name}. Skipping..."
+          next
+        end
 
-          random_fighter_ids = fighters_in_weight_class.sample(2)
-          random_fighters = Fighter.find(random_fighter_ids)
+        available_rounds = [4, 6, 8, 15]
 
-          available_rounds = [4, 6, 8, 15]
+        fighters_in_weight_class.combination(2).each do |fighter1_id, fighter2_id|
+          fighter1 = Fighter.find(fighter1_id)
+          fighter2 = Fighter.find(fighter2_id)
+
           max_rounds = available_rounds.sample
 
           Match.create!(
-            fighter_1: random_fighters[0],
-            fighter_2: random_fighters[1],
+            fighter_1: fighter1,
+            fighter_2: fighter2,
             max_rounds: max_rounds,
             status_id: 0,
             weight_class: weight_class
           )
 
-          puts "Match created for #{weight_class.name}"
+          puts "Match created for #{weight_class.name} between #{fighter1.name} and #{fighter2.name}"
         end
       end
     end
