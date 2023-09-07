@@ -11,6 +11,13 @@ class Match < ApplicationRecord
   after_initialize :set_default_status, if: :new_record?
   after_initialize :set_default_rounds, if: :new_record?
 
+  before_save :set_weight_class
+
+  def set_weight_class
+    higher_weight = [fighter_1.weight, fighter_2.weight].max
+    self.weight_class = WeightClass.find_highest_class_for_weight(higher_weight)
+  end
+
   def set_default_rounds
     self.max_rounds ||= 4
   end
