@@ -76,9 +76,14 @@ class Fighter < ApplicationRecord
 
     (wins.to_f / total_matches).round(3)
   end
-  def all_matches
-    matches_as_fighter_1.or(matches_as_fighter_2)
+  def completed_matches
+    (matches_as_fighter_1.or(matches_as_fighter_2)).where(status_id: :completed)
   end
+
+  def pending_matches
+    (matches_as_fighter_1.or(matches_as_fighter_2)).where(status_id: :pending)
+  end
+
   def rank
     self.weight_class.weight_class_ranks.find_by(fighter_id: self.id)&.rank_number
   end
