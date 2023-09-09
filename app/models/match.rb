@@ -164,6 +164,15 @@ class Match < ApplicationRecord
     end
   end
 
+  def outcome(fighter)
+    if winner_id == fighter.id
+      "Win"
+    elsif winner_id.nil?
+      "Draw"
+    else
+      "Loss"
+    end
+  end
   def score_match
     fighter_1_total_points = 0
     fighter_2_total_points = 0
