@@ -21,6 +21,8 @@
             <%= image_tag("sample_boxer.gif", class: "mx-auto h-32 w-32 flex-shrink-0 rounded-full", alt: fighter.name) %>
             <h2 class="mt-6 text-sm font-bold text-gray-900"><%= fighter.name %></h2>
             <h2 class="mt-6 text-sm font-bold text-gray-900"><%= fighter.wins %> - <%= fighter.losses %> - <%= fighter.draws %> (<%= fighter.knockouts %> KOs)</h2>
+            <p class="mt-1 text-xs text-gray-300 italic">Winning Pct <%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></p>
+
             <dl class="mt-1 flex flex-grow flex-col justify-between">
               <dd class="text-sm text-gray-500"><%= fighter.nickname %></dd>
               <dd class="mt-3">

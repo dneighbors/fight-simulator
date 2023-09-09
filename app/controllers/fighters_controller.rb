@@ -3,7 +3,7 @@ class FightersController < ApplicationController
 
   # GET /fighters or /fighters.json
   def index
-    @fighters = Fighter.all
+    @fighters = Fighter.order(:weight_class_id, :name)
   end
 
   # GET /fighters/1 or /fighters/1.json
