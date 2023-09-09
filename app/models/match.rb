@@ -173,6 +173,13 @@ class Match < ApplicationRecord
       "Loss"
     end
   end
+  def opponent(fighter)
+    if fighter_1_id == fighter.id
+      fighter_2
+    else
+      fighter_1
+    end
+  end
   def score_match
     fighter_1_total_points = 0
     fighter_2_total_points = 0

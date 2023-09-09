@@ -32,6 +32,7 @@
                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Fighter</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Record</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Winning Pct</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Next Match</th>
               </tr>
               </thead>
               <tbody class="divide-y divide-gray-200">
@@ -43,6 +44,7 @@
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"><%= link_to fighter.name, fighter_url(fighter), class: "text-blue-500 hover:underline" %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.wins %> - <%= fighter.losses %> - <%= fighter.draws %> (<%= fighter.knockouts %> KOs)</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.pending_matches.first&.opponent(fighter)&.name %></td>
               </tr>
               <% end %>
 

@@ -68,11 +68,8 @@
         Scheduled.  <%= link_to "Schedule one now.", new_match_url(), class: "text-blue-500 hover:underline" %></p>
     <% else %>
       <% fighter.pending_matches.each do |match| %>
-        <% if match.fighter_1 != fighter %>
-          <% opponent = match.fighter_1 %>
-        <% else %>
-          <% opponent = match.fighter_2 %>
-        <% end %>
+        <% opponent = match.opponent(fighter) %>
+
         <p class="mb-1 mt-1">
           vs
           <%= link_to opponent.name, fighter_url(opponent), class: "text-blue-500 hover:underline" %>
