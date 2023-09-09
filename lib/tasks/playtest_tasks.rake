@@ -11,6 +11,15 @@ namespace :playtest do
     end
   end
 
+  namespace :update do
+    desc "Update all weight class fighter rankings"
+    task rankings: :environment do
+      WeightClass.all.each do |weight_class|
+        weight_class.update_fighter_ranks
+      end
+    end
+  end
+
   namespace :create do
     desc "Creates a match for every fighter against every other fighter in the same weight class"
     task matches: :environment do
