@@ -3,7 +3,8 @@ class Fighter < ApplicationRecord
   has_many :matches_as_fighter_2, class_name: 'Match', foreign_key: 'fighter_2_id'
   has_many :won_matches, class_name: 'Match', foreign_key: 'winner_id'
   belongs_to :weight_class
-
+  has_many :weight_classes, through: :weight_class_ranks
+  has_many :weight_class_ranks
 
   attribute :punch, default: -> { roll_ability }
   attribute :strength, default: -> { roll_ability }
@@ -71,6 +72,9 @@ class Fighter < ApplicationRecord
     (wins.to_f / total_matches).round(3)
   end
 
+  def rank
+    self.weight_class_ranks.find_by(weight_class_id: self.weight_class.id).rank_number
+  end
   def update_endurance
     additional_endurance = Fighter.roll_base_endurance
     new_endurance = self.endurance + additional_endurance

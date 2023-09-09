@@ -2,6 +2,7 @@ class WeightClass < ApplicationRecord
   has_many :matches
   has_many :fighters
   has_many :weight_class_ranks
+  has_many :fighters, through: :weight_class_ranks
 
 
   def self.find_highest_class_for_weight(weight)
