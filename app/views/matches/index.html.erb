@@ -10,8 +10,12 @@
 
 <main>
   <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-
+    <p class="mb-4"><%= link_to("Past Matches", matches_url(status: "completed")) %> | <%= link_to("Pending Matches", matches_url()) %></p>
     <p style="color: green"><%= notice %></p>
+
+    <% if @matches.count < 1 %>
+      <p class="mb-1 mt-1">No Matches Scheduled.  <%= link_to "Schedule one now.", new_match_url(), class: "text-blue-500 hover:underline" %></p>
+    <% else %>
 
     <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 
@@ -55,7 +59,7 @@
       <% end %>
 
     </ul>
-
+    <% end %>
   </div>
 </main>
 

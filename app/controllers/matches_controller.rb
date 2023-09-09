@@ -3,7 +3,11 @@ class MatchesController < ApplicationController
 
   # GET /matches or /matches.json
   def index
-    @matches = Match.all
+    if params[:status] == "completed"
+      @matches = Match.where(status_id: :completed)
+    else
+      @matches = Match.where(status_id: :pending)
+    end
   end
 
   # GET /matches/1 or /matches/1.json
