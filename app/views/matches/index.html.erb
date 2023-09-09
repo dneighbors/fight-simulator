@@ -24,12 +24,13 @@
           <div class="flex flex-1 flex-col p-8">
             <h2 class="mt-6 text-sm font-bold text-gray-900"><%= "#{match.fighter_1.name} vs #{match.fighter_2.name}" %></h2>
 
-            <dl class="mt-1 flex flex-grow flex-col justify-between">
-              <dd class="mt-3 mb-3">
-                <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"><%= match.weight_class&.name %></span>
-
+            <%= link_to weight_class_path(match.weight_class) do %>
+              <dd class="mt-3">
+            <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+              <%= match.weight_class&.name %>
+            </span>
               </dd>
-            </dl>
+            <% end %>
             <% if match.pending? %>
               <div class="flex divide-x divide-gray-200">
                 <div class="flex w-0 flex-1">
