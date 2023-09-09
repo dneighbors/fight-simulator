@@ -73,7 +73,7 @@ class Fighter < ApplicationRecord
   end
 
   def rank
-    self.weight_class_ranks.find_by(weight_class_id: self.weight_class.id).rank_number
+    self.weight_class.weight_class_ranks.find_by(fighter_id: self.id)&.rank_number
   end
   def update_endurance
     additional_endurance = Fighter.roll_base_endurance
