@@ -15,6 +15,11 @@ class Fighter < ApplicationRecord
 
   after_initialize :set_endurance
   after_initialize :set_weight_class
+  after_create :set_rankings
+
+  def set_rankings
+    self.weight_class.update_fighter_ranks
+  end
 
   def set_endurance
     self.endurance ||= self.base_endurance

@@ -1,10 +1,10 @@
-<%= form_with(model: fighter) do |form| %>
-  <% if fighter.errors.any? %>
+<%= form_with(model: @fighter) do |form| %>
+  <% if @fighter.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(fighter.errors.count, "error") %> prohibited this fighter from being saved:</h2>
+      <h2><%= pluralize(@fighter.errors.count, "error") %> prohibited this fighter from being saved:</h2>
 
       <ul>
-        <% fighter.errors.each do |error| %>
+        <% @fighter.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
