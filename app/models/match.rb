@@ -202,6 +202,9 @@ class Match < ApplicationRecord
     self.completed!
     # Save the match with the final scores and winner_id set
     self.save
+
+    #Rank the fighters
+    self.weight_class.update_fighter_ranks
   end
 
   def reset_match
