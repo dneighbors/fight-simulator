@@ -16,12 +16,11 @@
         <dd class="text-sm text-gray-500"><%= fighter.nickname %></dd>
         <%= link_to weight_class_path(fighter.weight_class) do %>
           <dd class="mt-3">
-    <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-      <%= fighter.weight_class&.name %> (<%= fighter.weight %>)
-    </span>
+            <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+              <%= fighter.weight_class&.name %> (<%= fighter.weight %>)
+            </span>
           </dd>
         <% end %>
-
       </dl>
 
 
