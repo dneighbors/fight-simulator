@@ -27,10 +27,13 @@
             <p class="mt-1 text-xs text-gray-300 italic">Winning Pct <%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></p>
             <dl class="mt-1 flex flex-grow flex-col justify-between">
               <dd class="text-sm text-gray-500"><%= fighter.nickname %></dd>
-              <dd class="mt-3">
-                <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"><%= fighter.weight_class&.name %> (<%= fighter.weight %>)</span>
-              </dd>
-            </dl>
+              <%= link_to weight_class_path(fighter.weight_class) do %>
+                <dd class="mt-3">
+    <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+      <%= fighter.weight_class&.name %> (<%= fighter.weight %>)
+    </span>
+                </dd>
+              <% end %>            </dl>
 
 
             <table class="min-w-full divide-y divide-gray-300 mt-5">

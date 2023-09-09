@@ -14,10 +14,14 @@
         Pct <%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></p>
       <dl class="mt-1 flex flex-grow flex-col justify-between">
         <dd class="text-sm text-gray-500"><%= fighter.nickname %></dd>
-        <dd class="mt-3">
-          <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"><%= fighter.weight_class&.name %>
-            (<%= fighter.weight %>)</span>
-        </dd>
+        <%= link_to weight_class_path(fighter.weight_class) do %>
+          <dd class="mt-3">
+    <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+      <%= fighter.weight_class&.name %> (<%= fighter.weight %>)
+    </span>
+          </dd>
+        <% end %>
+
       </dl>
 
 
@@ -61,7 +65,8 @@
     <h2 class="text-xl font-bold text-gray-900">Next Match</h2>
 
     <% if fighter.pending_matches.blank? %>
-      <p class="mb-1 mt-1">No Matches Scheduled.  <%= link_to "Schedule one now.", new_match_url(), class: "text-blue-500 hover:underline" %></p>
+      <p class="mb-1 mt-1">No Matches
+        Scheduled.  <%= link_to "Schedule one now.", new_match_url(), class: "text-blue-500 hover:underline" %></p>
     <% else %>
       <% fighter.pending_matches.each do |match| %>
         <% if match.fighter_1 != fighter %>
@@ -71,8 +76,10 @@
         <% end %>
         <p class="mb-1 mt-1">
           vs
-          <%= link_to opponent.name, fighter_url(opponent), class: "text-blue-500 hover:underline" %>(<%= opponent.wins %> - <%= opponent.losses %> - <%= opponent.draws %>
-          ) <%= match.max_rounds %> Rounds [<%= link_to "Fight", fight_match_url(match),class: "text-blue-500 hover:underline" %>]
+          <%= link_to opponent.name, fighter_url(opponent), class: "text-blue-500 hover:underline" %>
+          (<%= opponent.wins %> - <%= opponent.losses %> - <%= opponent.draws %>
+          ) <%= match.max_rounds %> Rounds
+          [<%= link_to "Fight", fight_match_url(match), class: "text-blue-500 hover:underline" %>]
         </p>
       <% end %>
     <% end %>
