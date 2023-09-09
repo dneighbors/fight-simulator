@@ -38,13 +38,18 @@
               <tbody class="divide-y divide-gray-200">
 
               <% @weight_class.fighters.sort_by { |fighter| fighter.rank }.each do |fighter| %>
+              <% opponent =  fighter.pending_matches.first&.opponent(fighter) %>
 
               <tr>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.rank %></td>
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"><%= link_to fighter.name, fighter_url(fighter), class: "text-blue-500 hover:underline" %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.wins %> - <%= fighter.losses %> - <%= fighter.draws %> (<%= fighter.knockouts %> KOs)</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.pending_matches.first&.opponent(fighter)&.name %></td>
+                <% if opponent.nil? %>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">TBA. <%= link_to "Schedule One", new_match_url(fighter_1_id: fighter.id, weight_class_id: @weight_class.id), class: "text-blue-500 hover:underline" %></td>
+                <% else %>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= link_to opponent&.name, fighter_url(opponent), class: "text-blue-500 hover:underline" %></td>
+                <% end %>
               </tr>
               <% end %>
 

@@ -17,7 +17,12 @@ class MatchesController < ApplicationController
   # GET /matches/new
   def new
     @match = Match.new
-    @fighters = Fighter.all
+    @match.fighter_1 = Fighter.find(params[:fighter_1_id]) if params[:fighter_1_id].present?
+    if params[:weight_class_id].present?
+      @fighters = Fighter.where(weight_class_id: params[:weight_class_id])
+    else
+      @fighters = Fighter.all
+    end
     @weight_classes = WeightClass.all
   end
 

@@ -65,7 +65,8 @@
 
     <% if fighter.pending_matches.blank? %>
       <p class="mb-1 mt-1">No Matches
-        Scheduled.  <%= link_to "Schedule one now.", new_match_url(), class: "text-blue-500 hover:underline" %></p>
+        Scheduled.  <%= link_to "Schedule one now.", new_match_url(fighter_1_id: fighter.id, weight_class_id: fighter.weight_class.id), class: "text-blue-500 hover:underline" %>
+      </p>
     <% else %>
       <% fighter.pending_matches.each do |match| %>
         <% opponent = match.opponent(fighter) %>
