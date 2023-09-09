@@ -71,8 +71,9 @@
         <% end %>
         <p class="mb-1 mt-1">
           vs
-          <%= opponent.name %>(<%= opponent.wins %> - <%= opponent.losses %> - <%= opponent.draws %>
-          ) <%= match.rounds.count %> Rounds
+          <%= link_to opponent.name, fighter_url(opponent), class: "text-blue-500 hover:underline" %>(<%= opponent.wins %> - <%= opponent.losses %> - <%= opponent.draws %>
+          ) <%= match.max_rounds %> Rounds
+        </p>
       <% end %>
     <% end %>
 
@@ -87,7 +88,7 @@
         <% end %>
         <%= match.outcome(fighter) %>
         vs
-        <%= opponent.name %>
+        <%= link_to opponent.name, fighter_url(opponent), class: "text-blue-500 hover:underline" %>
         (<%= opponent.wins %> - <%= opponent.losses %> - <%= opponent.draws %>)
         <% if match.result_id == "ko" %>
           <%= match.rounds.count.ordinalize %> Round <%= match.result_id.upcase %>
