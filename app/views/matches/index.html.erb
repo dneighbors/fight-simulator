@@ -10,7 +10,7 @@
 
 <main>
   <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-    <p class="mb-4"><%= link_to("Past Matches", matches_url(status: "completed")) %> | <%= link_to("Pending Matches", matches_url()) %></p>
+    <p class="mb-4"><%= link_to("Past Matches", matches_url(status: "completed"), class: "text-blue-500 hover:underline") %> | <%= link_to("Pending Matches", matches_url(), class: "text-blue-500 hover:underline") %></p>
     <p style="color: green"><%= notice %></p>
 
     <% if @matches.count < 1 %>
