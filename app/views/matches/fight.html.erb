@@ -40,8 +40,15 @@
     <% if @match.winner_id.nil? %>
       <div>Match is a draw!</div>
     <% else %>
-      <div><%= @match.winner&.name %> winner by <%= @match.result_id.upcase %> in the <%= @match.rounds.count.ordinalize %> round!</div>
+      <div>
+        <%= link_to @match.winner&.name, fighter_path(@match.winner), class: "text-blue-500 hover:underline" %> winner by <%= @match.result_id.upcase %> in the <%= @match.rounds.count.ordinalize %> round!
+      </div>
     <% end %>
-    <div><%= "Scored #{@match.fighter_1.name} #{@match.fighter_1_final_score}" - "#{@match.fighter_1.name} #{@match.fighter_2_final_score}" if @match.result_id == 'decision' %></div>
+      <% if @match.result_id == 'decision' %>
+      <div>
+        <%= link_to(@match.fighter_1.name, fighter_path(@match.fighter_1), class: "text-blue-500 hover:underline") %> <%= @match.fighter_1_final_score %> - <%= link_to @match.fighter_2.name, fighter_path(@match.fighter_2), class: "text-blue-500 hover:underline" %> <%= @match.fighter_2_final_score %>
+      </div>
+      <% end %>
+    <div class="mt-5"><%= link_to("View #{@match.weight_class.name} rankings.", weight_class_path(@match.weight_class), class: "text-blue-500 hover:underline") %></div>
     </div>
 </main>
