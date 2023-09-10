@@ -8,6 +8,21 @@ class WeightClass < ApplicationRecord
   end
 
   def update_fighter_ranks
+    # Set the previous_rank and highest_rank for all fighters in this weight class
+    self.fighters.each do |fighter|
+      # Find the rank entry for this fighter and weight class
+      current_rank = WeightClassRank.find_by(fighter: fighter, weight_class: self)
+
+      if (fighter.highest_rank.nil?) || (current_rank.rank_number > fighter.highest_rank)
+        highest_rank = current_rank.rank_number
+      else
+        highest_rank = fighter.highest_rank
+      end
+
+      # Update the previous_rank and highest_rank for this fighter
+      fighter.update(previous_rank: current_rank.rank_number, highest_rank: highest_rank)
+    end
+
     # Delete all existing rank entries for this weight class
     weight_class_ranks.destroy_all
 
