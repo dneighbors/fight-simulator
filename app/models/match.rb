@@ -18,8 +18,10 @@ class Match < ApplicationRecord
     self.weight_class = WeightClass.find_highest_class_for_weight(higher_weight)
   end
 
+  after_initialize :set_default_rounds, if: :new_record?
+
   def set_default_rounds
-    self.max_rounds ||= 4
+    self.max_rounds ||= calculate_default_max_rounds
   end
   def set_default_status
     self.status_id ||= 0
@@ -28,6 +30,7 @@ class Match < ApplicationRecord
   def self.roll_d20
     rand(1..20)
   end
+
 
   def punch(offensive_fighter, defensive_fighter, round, fighter_number)
 
@@ -44,7 +47,7 @@ class Match < ApplicationRecord
       score_round(round, fighter_number, damage)
       reduce_health(defensive_fighter, damage)
       if defensive_fighter.endurance <= 0
-        end_match(offensive_fighter, defensive_fighter, round, damage)
+        end_match(offensive_fighter, defensive_fighter, damage)
       else
         "landed a body blow. #{defensive_fighter.name} takes #{damage} damage."
       end
@@ -52,7 +55,7 @@ class Match < ApplicationRecord
       score_round(round, fighter_number, damage)
       reduce_health(defensive_fighter, damage)
       if defensive_fighter.endurance <= 0
-        end_match(offensive_fighter, defensive_fighter, round, damage)
+        end_match(offensive_fighter, defensive_fighter, damage)
       else
         "stuck a jab. #{defensive_fighter.name} takes #{damage} damage."
       end
@@ -60,7 +63,7 @@ class Match < ApplicationRecord
       score_round(round, fighter_number, damage)
       reduce_health(defensive_fighter, damage)
       if defensive_fighter.endurance <= 0
-        end_match(offensive_fighter, defensive_fighter, round, damage)
+        end_match(offensive_fighter, defensive_fighter, damage)
       else
         "solid head shot. #{defensive_fighter.name} takes #{damage} damage."
       end
@@ -71,7 +74,7 @@ class Match < ApplicationRecord
       knockout = determine_knockout(defensive_fighter, damage)
       score_round(round, fighter_number, damage)
       if knockout
-        end_match(offensive_fighter, defensive_fighter, round, damage)
+        end_match(offensive_fighter, defensive_fighter, damage)
       else
         "KNOCKED #{defensive_fighter.name} DOWN. #{defensive_fighter.name} takes #{damage} damage."
       end
@@ -80,7 +83,7 @@ class Match < ApplicationRecord
     end
   end
 
-  def end_match(offensive_fighter, defensive_fighter, round, damage)
+  def end_match(offensive_fighter, defensive_fighter, damage)
     self.winner = offensive_fighter
     self.ko!
     "HAS KNOCKED OUT #{defensive_fighter.name} inflicting #{damage} damage."
@@ -101,8 +104,7 @@ class Match < ApplicationRecord
   def calculate_damage(offensive_fighter, defensive_fighter)
     damage = punch_strength(offensive_fighter)
     damage_modifier = dexterity_modifier(defensive_fighter)
-    damage = (damage * damage_modifier).round
-    damage
+    (damage * damage_modifier).round
   end
 
   def determine_knockout(defensive_fighter, damage)
@@ -116,7 +118,7 @@ class Match < ApplicationRecord
         true
       end
     when 18..30
-      if ((damage > 10) && (rand(1..100) < 40) || defensive_fighter.endurance < 20)
+      if ((damage > 10) && (rand(1..100) < 40)) || (defensive_fighter.endurance < 20)
         true
       else
         false
@@ -243,4 +245,22 @@ class Match < ApplicationRecord
     end
   end
 
+  private
+
+  def calculate_default_max_rounds
+    # Assuming you have access to the ranks of the current fighters
+    lowest_rank = [self.fighter_1.rank, self.fighter_2].min
+
+    # Set default_rounds based on the highest rank
+    case lowest_rank
+    when 1..3
+      15
+    when 4..6
+      8
+    when 7..9
+      6
+    else
+      4
+    end
+  end
 end
