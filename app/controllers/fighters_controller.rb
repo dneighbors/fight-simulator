@@ -28,7 +28,7 @@ class FightersController < ApplicationController
 
     respond_to do |format|
       if @fighter.save
-        format.html { redirect_to fighters_url, notice: "Fighter was successfully created." }
+        format.html { redirect_to fighter_url(@fighter), notice: "Fighter was successfully created." }
         format.json { render :show, status: :created, location: @fighter }
       else
         format.html { render :new, status: :unprocessable_entity }
