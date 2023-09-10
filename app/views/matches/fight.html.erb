@@ -30,7 +30,7 @@
           <%= "#{@match.fighter_2.name} #{@match.punch(@match.fighter_2, @match.fighter_1, new_round, 2)}" %>
         </span>
       </div>
-      Round Score: <%= "#{@match.fighter_1.name} : #{new_round.fighter_1_points} - #{@match.fighter_2.name} : #{new_round.fighter_2_points}" %>
+        <div class="mb-5">Round Score: <%= "#{@match.fighter_1.name} : #{new_round.fighter_1_points} - #{@match.fighter_2.name} : #{new_round.fighter_2_points}" %></div>
         <% end %>
     <% end %>
     <% @match.score_match %>
@@ -38,11 +38,10 @@
 
     <h2 class="text-lg font-medium leading-5 text-gray-800 py-2">Match Score</h2>
     <% if @match.winner_id.nil? %>
-      Match is a draw!
+      <div>Match is a draw!</div>
     <% else %>
-      Winner: <%= @match.winner&.name %>
+      <div><%= @match.winner&.name %> winner by <%= @match.result_id.upcase %> in the <%= @match.rounds.count.ordinalize %> round!</div>
     <% end %>
-    <%= @match.fighter_1.name %> : <%= @match.fighter_1_final_score %>
-    <%= @match.fighter_2.name %> : <%= @match.fighter_2_final_score %>
-  </div>
+    <div><%= "Scored #{@match.fighter_1.name} #{@match.fighter_1_final_score}" - "#{@match.fighter_1.name} #{@match.fighter_2_final_score}" if @match.result_id == 'decision' %></div>
+    </div>
 </main>
