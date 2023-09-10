@@ -70,6 +70,9 @@
 
 
     <div class="mt-10 flex items-center justify-end gap-x-6">
+      <%= link_to new_fighter_url(weight_class_id: @weight_class.id), class: "text-sm font-semibold leading-6 text-gray-900" do %>
+        Create Fighter in <%= @weight_class.name %>
+      <% end %>
       <%= link_to weight_classes_url, class: "text-sm font-semibold leading-6 text-gray-900" do %>
         Back to Weight Classes
       <% end %>

@@ -13,6 +13,7 @@ class FightersController < ApplicationController
   # GET /fighters/new
   def new
     @fighter = Fighter.new
+    @fighter.weight = (WeightClass.find(params[:weight_class_id]).max_weight - 2) if params[:weight_class_id].present?
     @weight_classes = WeightClass.all
   end
 

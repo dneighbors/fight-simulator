@@ -6,6 +6,9 @@ class Fighter < ApplicationRecord
   has_many :weight_classes, through: :weight_class_ranks
   has_many :weight_class_ranks
 
+  attribute :name, default: -> { random_name }
+  attribute :nickname, default: -> { random_nickname }
+  attribute :birthplace, default: -> { random_birthplace }
   attribute :punch, default: -> { roll_ability }
   attribute :strength, default: -> { roll_ability }
   attribute :speed, default: -> { roll_ability }
@@ -16,6 +19,18 @@ class Fighter < ApplicationRecord
   after_initialize :set_endurance
   after_initialize :set_weight_class
   after_create :set_rankings
+
+  def self.random_name
+    Faker::Name.male_first_name + ' ' + Faker::Name.last_name
+  end
+
+  def self.random_birthplace
+    Faker::Address.city
+  end
+
+  def self.random_nickname
+    Faker::Superhero.name
+  end
 
   def set_rankings
     self.weight_class.update_fighter_ranks
