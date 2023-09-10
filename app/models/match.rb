@@ -8,21 +8,16 @@ class Match < ApplicationRecord
   enum status_id: { pending: 0, completed: 1 }
   enum result_id: { decision: 0, tko: 1, ko: 2 }
 
-  after_initialize :set_default_status, if: :new_record?
-  after_initialize :set_default_rounds, if: :new_record?
+  before_save :set_default_status, if: :new_record?
 
   before_save :set_weight_class
+  before_save :set_default_rounds
 
   def set_weight_class
     higher_weight = [fighter_1.weight, fighter_2.weight].max
     self.weight_class = WeightClass.find_highest_class_for_weight(higher_weight)
   end
 
-  after_initialize :set_default_rounds, if: :new_record?
-
-  def set_default_rounds
-    self.max_rounds ||= calculate_default_max_rounds
-  end
   def set_default_status
     self.status_id ||= 0
   end
@@ -30,7 +25,6 @@ class Match < ApplicationRecord
   def self.roll_d20
     rand(1..20)
   end
-
 
   def punch(offensive_fighter, defensive_fighter, round, fighter_number)
 
@@ -175,6 +169,7 @@ class Match < ApplicationRecord
       "Loss"
     end
   end
+
   def opponent(fighter)
     if fighter_1_id == fighter.id
       fighter_2
@@ -182,6 +177,7 @@ class Match < ApplicationRecord
       fighter_1
     end
   end
+
   def score_match
     fighter_1_total_points = 0
     fighter_2_total_points = 0
@@ -221,7 +217,7 @@ class Match < ApplicationRecord
     # Save the match with the final scores and winner_id set
     self.save
 
-    #Rank the fighters
+    # Rank the fighters
     self.weight_class.update_fighter_ranks
   end
 
@@ -247,20 +243,21 @@ class Match < ApplicationRecord
 
   private
 
-  def calculate_default_max_rounds
+  def set_default_rounds
     # Assuming you have access to the ranks of the current fighters
-    lowest_rank = [self.fighter_1.rank, self.fighter_2].min
+    lowest_rank = [self.fighter_1.rank, self.fighter_2.rank].min
 
     # Set default_rounds based on the highest rank
-    case lowest_rank
-    when 1..3
-      15
-    when 4..6
-      8
-    when 7..9
-      6
-    else
-      4
-    end
+    self.max_rounds ||=
+      case lowest_rank
+      when 1..3
+        15
+      when 4..6
+        8
+      when 7..9
+        6
+      else
+        4
+      end
   end
 end
