@@ -32,23 +32,30 @@
                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Fighter</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Record</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Winning Pct</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Last Opponent</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Next Match</th>
               </tr>
               </thead>
               <tbody class="divide-y divide-gray-200">
 
               <% @weight_class.fighters.sort_by { |fighter| fighter.rank }.each do |fighter| %>
-              <% opponent =  fighter.pending_matches.first&.opponent(fighter) %>
+              <% next_opponent =  fighter.pending_matches.first&.opponent(fighter) %>
+              <% last_opponent =  fighter.completed_matches.last&.opponent(fighter) %>
 
               <tr>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.rank %></td>
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"><%= link_to fighter.name, fighter_url(fighter), class: "text-blue-500 hover:underline" %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.wins %> - <%= fighter.losses %> - <%= fighter.draws %> (<%= fighter.knockouts %> KOs)</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></td>
-                <% if opponent.nil? %>
+                <% if last_opponent.nil? %>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">No Fights</td>
+                <% else %>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= link_to last_opponent&.name, fighter_url(last_opponent), class: "text-blue-500 hover:underline" %></td>
+                <% end %>
+                <% if next_opponent.nil? %>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">TBA. <%= link_to "Schedule One", new_match_url(fighter_1_id: fighter.id, weight_class_id: @weight_class.id), class: "text-blue-500 hover:underline" %></td>
                 <% else %>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= link_to opponent&.name, fighter_url(opponent), class: "text-blue-500 hover:underline" %></td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= link_to next_opponent&.name, fighter_url(next_opponent), class: "text-blue-500 hover:underline" %></td>
                 <% end %>
               </tr>
               <% end %>
