@@ -17,8 +17,19 @@ class WeightClass < ApplicationRecord
     # Find all fighters in this weight class
     fighters = self.fighters
 
-    # Sort fighters by winning_percentage in descending order & then by name in ascending order
-    sorted_fighters = fighters.sort_by { |fighter| [-fighter.winning_percentage, fighter.name] }
+    # Calculate a composite score for each fighter
+    sorted_fighters = fighters.sort_by do |fighter|
+      # Winning percentage as the first factor (higher is better)
+      winning_percentage = -fighter.winning_percentage
+
+      # Number of fights as the second factor (higher is better)
+      number_of_fights = -(fighter.matches_as_fighter_1.count + fighter.matches_as_fighter_2.count)
+
+      # Highest previous rank as the third factor (lower is better)
+      highest_rank = fighter.highest_rank || Float::INFINITY
+
+      [winning_percentage, number_of_fights, highest_rank]
+    end
 
     # Update the ranks in the WeightClassRank model
     sorted_fighters.each_with_index do |fighter, index|
