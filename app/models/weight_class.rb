@@ -50,6 +50,7 @@ class WeightClass < ApplicationRecord
       else
         composite_score = (winning_percentage + number_of_fights) - highest_rank
       end
+      composite_score = -100000 if number_of_fights == 0
 
       # Sort in descending order of composite score
       -composite_score
