@@ -31,6 +31,7 @@
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Current Rank</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Prev Rank</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Highest Rank</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Current Title(s)</th>
                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Fighter</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Record</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Winning Pct</th>
@@ -48,6 +49,14 @@
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.rank %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.previous_rank %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.highest_rank %></td>
+                <% if fighter.current_champion? %>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 relative group">
+                      <%= fighter.titles_list %>
+                  </td>
+                <% else %>
+                  <td>&nbsp;</td>
+                <% end %>
+
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"><%= link_to fighter.name, fighter_url(fighter), class: "text-blue-500 hover:underline" %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.wins %> - <%= fighter.losses %> - <%= fighter.draws %> (<%= fighter.knockouts %> KOs)</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></td>

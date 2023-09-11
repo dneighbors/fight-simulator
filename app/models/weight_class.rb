@@ -2,6 +2,8 @@ class WeightClass < ApplicationRecord
   has_many :matches
   has_many :fighters, class_name: 'Fighter', foreign_key: 'weight_class_id'
   has_many :weight_class_ranks
+  has_many :titles
+  #  has_many :fighters, through: :titles
 
   def self.find_highest_class_for_weight(weight)
     where("max_weight >= ?", weight).order(max_weight: :asc).first

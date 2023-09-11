@@ -2,6 +2,7 @@ class Fighter < ApplicationRecord
   has_many :matches_as_fighter_1, class_name: 'Match', foreign_key: 'fighter_1_id'
   has_many :matches_as_fighter_2, class_name: 'Match', foreign_key: 'fighter_2_id'
   has_many :won_matches, class_name: 'Match', foreign_key: 'winner_id'
+  has_many :titles
   belongs_to :weight_class
   has_many :weight_classes, through: :weight_class_ranks
   has_many :weight_class_ranks
@@ -98,7 +99,17 @@ class Fighter < ApplicationRecord
   def pending_matches
     (matches_as_fighter_1.or(matches_as_fighter_2)).where(status_id: :pending)
   end
+  def titles_list
+    titles.map(&:name).join(', ')
+  end
 
+  def current_champion?
+    titles.where(lost_at: nil).exists?
+  end
+
+  def past_champion?
+    titles.where.not(lost_at: nil).exists?
+  end
   def rank
     self.weight_class.weight_class_ranks.find_by(fighter_id: self.id)&.rank_number
   end

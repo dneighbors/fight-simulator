@@ -22,6 +22,12 @@
             <h2 class="mt-6 text-xl font-bold text-gray-900"><%= fighter.name %></h2>
             <h3 class="text-sm text-gray-500"><%= fighter.nickname %></h3>
 
+            <% if fighter.current_champion? %>
+              <% fighter.titles.where(lost_at: nil).each do |title| %>
+                <h3 class="mt-2 text-md font-bold text-gray-900"><%= title.name %></h3>
+              <% end %>
+            <% end %>
+
             <h3 class="mt-2 text-md font-bold text-gray-900">Rank <%= fighter.rank %></h3>
             <p class="text-xs text-gray-300 italic">Highest (<%= fighter.highest_rank %>) / Previous (<%= fighter.previous_rank %>)</p>
 

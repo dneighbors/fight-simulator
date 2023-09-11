@@ -21,6 +21,39 @@ namespace :playtest do
   end
 
   namespace :create do
+    desc "Create initial title holders for all weight classes"
+    task rankings: :environment do
+      # Delete all records in the titles table
+      Title.delete_all
+
+      # Get all weight classes
+      weight_classes = WeightClass.all
+
+      weight_classes.each do |weight_class|
+        # Find the #1 ranked fighter in this weight class
+        top_ranked_fighter = weight_class.fighters.order(:previous_rank).first
+
+        if top_ranked_fighter.present?
+          # Create a new title record
+          title = Title.new(
+            fighter: top_ranked_fighter,
+            weight_class: weight_class,
+            won_at: Time.now,
+            name: "#{weight_class.name} Champion"
+          )
+
+          # Save the title record
+          title.save
+
+          puts "Created title: #{title.name} for #{top_ranked_fighter.name}"
+        else
+          puts "No top-ranked fighter found for #{weight_class.name}"
+        end
+      end
+    end
+  end
+
+  namespace :create do
     desc "Creates a match for every fighter against every other fighter in the same weight class"
     task matches: :environment do
       weight_classes = WeightClass.all
