@@ -68,6 +68,14 @@ class WeightClass < ApplicationRecord
 
   end
 
+  def current_champion
+    # Find the title for this weight class with no lost_at date (i.e., the current champion)
+    current_champion_title = titles.where(lost_at: nil).first
+
+    # Return the fighter associated with the current champion title if it exists
+    current_champion_title&.fighter
+  end
+
   private
 
   def set_highest_rank(fighter)
@@ -95,4 +103,6 @@ class WeightClass < ApplicationRecord
     # Update the previous_rank and highest_rank for this fighter
     fighter.update(previous_rank: previous_rank)
   end
+
+
 end

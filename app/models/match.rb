@@ -211,6 +211,35 @@ class Match < ApplicationRecord
       # It's a draw, set winner_id to nil or handle accordingly
       self.winner_id ||= nil
     end
+
+
+    if self.winner_id.present?
+      # Get the Current Champion
+      current_champion = self.weight_class.current_champion
+      Rails.logger.info "Current Champion: #{current_champion&.name} #{current_champion&.id}"
+      Rails.logger.info "Winner: #{self.winner&.name} #{self.winner&.id}"
+
+
+      if current_champion
+        # Check if the current champion is one of the fighters in the match
+        if current_champion.id == self.fighter_1_id || current_champion.id == self.fighter_2_id
+          Rails.logger.info "Current Champion is one of the fighters in the match"
+          if self.winner_id != current_champion.id
+            Rails.logger.info "Current Champion lost the match"
+          current_champion.titles.find_by(weight_class_id: self.weight_class_id, lost_at: nil).update(lost_at: Time.now)
+
+          # Generate a new title record for the winner
+          Title.create(
+            fighter_id: self.winner_id,
+            weight_class_id: self.weight_class_id,
+            name: "#{self.weight_class.name} Champion",
+            won_at: Time.now
+          )
+          end
+        end
+      end
+    end
+
     self.decision! unless self.ko?
 
     self.completed!
