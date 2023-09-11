@@ -25,10 +25,12 @@ class WeightClass < ApplicationRecord
     number_of_fights_weight = 0.05
     highest_rank_weight = 0.2
 
+
     # Calculate a composite score for each fighter
     sorted_fighters = fighters.sort_by do |fighter|
+
       if current_champion.present? && fighter == current_champion
-        champion_modifier = 2
+        champion_modifier = 100
       else
         champion_modifier = 1
       end
@@ -40,10 +42,14 @@ class WeightClass < ApplicationRecord
       number_of_fights = (fighter.matches_as_fighter_1.count + fighter.matches_as_fighter_2.count) * number_of_fights_weight
 
       # Highest previous rank as the third factor (lower is better)
-      highest_rank = fighter.highest_rank || Float::INFINITY * highest_rank_weight
+      highest_rank = fighter.highest_rank #|| Float::INFINITY * highest_rank_weight
 
+      if highest_rank.nil?
       # Calculate the composite score
-      composite_score = winning_percentage + number_of_fights # + highest_rank
+        composite_score = (winning_percentage + number_of_fights)
+      else
+        composite_score = (winning_percentage + number_of_fights) - highest_rank
+      end
 
       # Sort in descending order of composite score
       -composite_score
@@ -52,9 +58,9 @@ class WeightClass < ApplicationRecord
 
 
     # Print out the sorted fighters for debugging
-    # sorted_fighters.each_with_index do |fighter, index|
-    #   puts "#{index + 1} #{fighter.name} Record:#{fighter.wins}-#{fighter.losses}-#{fighter.draws} Winning PCT:#{fighter.winning_percentage} Highest Rank:#{fighter.highest_rank}"
-    # end
+    sorted_fighters.each_with_index do |fighter, index|
+      Rails.logger.info "#{index + 1} #{fighter.name} Record:#{fighter.wins}-#{fighter.losses}-#{fighter.draws} Winning PCT:#{fighter.winning_percentage} Highest Rank:#{fighter.highest_rank}"
+    end
 
     # Update the ranks in the WeightClassRank model
     sorted_fighters.each_with_index do |fighter, index|
