@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_10_222345) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_11_004733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_10_222345) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["match_id"], name: "index_rounds_on_match_id"
+  end
+
+  create_table "titles", force: :cascade do |t|
+    t.string "name"
+    t.bigint "weight_class_id"
+    t.bigint "fighter_id"
+    t.datetime "won_at"
+    t.datetime "lost_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "weight_class_ranks", force: :cascade do |t|
