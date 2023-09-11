@@ -10,6 +10,7 @@ class WeightClass < ApplicationRecord
   end
 
   def update_fighter_ranks
+
     # Set the previous_rank for all fighters in this weight class
     self.fighters.each(&method(:set_previous_rank))
 
@@ -26,8 +27,14 @@ class WeightClass < ApplicationRecord
 
     # Calculate a composite score for each fighter
     sorted_fighters = fighters.sort_by do |fighter|
+      if current_champion.present? && fighter == current_champion
+        champion_modifier = 2
+      else
+        champion_modifier = 1
+      end
+
       # Winning percentage as the first factor (higher is better)
-      winning_percentage = fighter.winning_percentage * winning_percentage_weight
+      winning_percentage = (fighter.winning_percentage * winning_percentage_weight) * champion_modifier
 
       # Number of fights as the second factor (higher is better)
       number_of_fights = (fighter.matches_as_fighter_1.count + fighter.matches_as_fighter_2.count) * number_of_fights_weight
@@ -41,6 +48,9 @@ class WeightClass < ApplicationRecord
       # Sort in descending order of composite score
       -composite_score
     end
+
+
+
     # Print out the sorted fighters for debugging
     # sorted_fighters.each_with_index do |fighter, index|
     #   puts "#{index + 1} #{fighter.name} Record:#{fighter.wins}-#{fighter.losses}-#{fighter.draws} Winning PCT:#{fighter.winning_percentage} Highest Rank:#{fighter.highest_rank}"
