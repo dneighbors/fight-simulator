@@ -32,10 +32,8 @@
     </div>
 
     <div class="mt-10 flex items-center justify-end gap-x-6">
-      <% if @match.completed! %>
         <%= link_to fight_match_path(@match), class: "text-sm font-semibold leading-6 text-gray-900" do %>
           Fight
-        <% end %>
       <% end %>
       <%= link_to matches_url, class: "text-sm font-semibold leading-6 text-gray-900" do %>
         Back to Matches
