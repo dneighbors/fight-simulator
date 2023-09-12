@@ -16,91 +16,9 @@
     <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 
       <% @fighters.each do |fighter| %>
-        <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
-          <div class="flex flex-1 flex-col p-8">
-            <%= image_tag("sample_boxer.gif", class: "mx-auto h-32 w-32 flex-shrink-0 rounded-full", alt: fighter.name) %>
-            <h2 class="mt-6 text-xl font-bold text-gray-900"><%= fighter.name %></h2>
-            <h3 class="text-sm text-gray-500"><%= fighter.nickname %></h3>
+        <%= render partial: "fighter_card", locals: { fighter: fighter } %>
 
-            <% if fighter.current_champion? %>
-              <% fighter.titles.where(lost_at: nil).each do |title| %>
-                <h3 class="mt-2 text-md font-bold text-gray-900"><%= title.name %></h3>
-              <% end %>
-            <% end %>
-
-            <h3 class="mt-2 text-md font-bold text-gray-900">Rank <%= fighter.rank %></h3>
-            <p class="text-xs text-gray-300 italic">Highest (<%= fighter.highest_rank %>) / Previous (<%= fighter.previous_rank %>)</p>
-
-            <h4 class="text-sm font-bold text-gray-900"><%= fighter.wins %> - <%= fighter.losses %>
-              - <%= fighter.draws %> (<%= fighter.knockouts %> KOs)</h4>
-            <p class="mt-1 text-xs text-gray-300 italic">Winning
-              Pct <%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></p>
-            <dl class="mt-1 flex flex-grow flex-col justify-between">
-              <dd class="text-sm text-gray-500"><%= fighter.nickname %></dd>
-              <%= link_to weight_class_path(fighter.weight_class) do %>
-                <dd class="mt-3">
-                  <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                    <%= fighter.weight_class&.name %> (<%= fighter.weight %>)
-                  </span>
-                </dd>
-              <% end %>
-            </dl>
-
-            <table class="min-w-full divide-y divide-gray-300 mt-5">
-              <tbody class="divide-y divide-gray-200 bg-white">
-              <tr class="divide-x divide-gray-200">
-                <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Punch</td>
-                <td class="whitespace-nowrap p-4 text-sm text-gray-500"><%= fighter.punch %></td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Strength</td>
-                <td class="whitespace-nowrap p-4 text-sm text-gray-500"><%= fighter.strength %></td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Speed</td>
-                <td class="whitespace-nowrap p-4 text-sm text-gray-500"><%= fighter.speed %></td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Dexterity</td>
-                <td class="whitespace-nowrap p-4 text-sm text-gray-500"><%= fighter.dexterity %></td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Base Endurance
-                </td>
-                <td class="whitespace-nowrap p-4 text-sm text-gray-500"><%= fighter.base_endurance %></td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-medium text-gray-900 sm:pl-0">Current
-                  Endurance
-                </td>
-                <td class="whitespace-nowrap p-4 text-sm text-gray-500"><%= fighter.endurance %></td>
-              </tr>
-              </tbody>
-            </table>
-
-            <div class="-mt-px flex divide-x divide-gray-200">
-              <div class="flex w-0 flex-1">
-                <%= link_to edit_fighter_path(fighter), class: "relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900" do %>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                    <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"/>
-                  </svg>
-                  Edit
-                <% end %>
-              </div>
-              <div class="flex w-0 flex-1">
-                <%= link_to fighter_path(fighter), class: "relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900" do %>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
-                  </svg>
-                  Show
-                <% end %>
-              </div>
-            </div>
-
-          </div>
-        </li>
-
-      <% end %>
+    <% end %>
 
     </ul>
 
