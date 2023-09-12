@@ -21,9 +21,9 @@ class WeightClass < ApplicationRecord
     fighters = self.fighters
 
     # Define weights for each factor
-    winning_percentage_weight = 0.9
-    number_of_fights_weight = 0.05
-    highest_rank_weight = 0.2
+    winning_percentage_weight = 100
+    number_of_fights_weight = 1
+    highest_rank_weight = 0.5
 
 
     # Calculate a composite score for each fighter
@@ -50,6 +50,7 @@ class WeightClass < ApplicationRecord
       else
         composite_score = (winning_percentage + number_of_fights) - highest_rank
       end
+      composite_score = composite_score * 0.5 if number_of_fights < 3
       composite_score = -100000 if number_of_fights == 0
 
       # Sort in descending order of composite score
