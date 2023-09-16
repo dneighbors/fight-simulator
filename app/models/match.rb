@@ -12,7 +12,32 @@ class Match < ApplicationRecord
 
   before_save :set_weight_class
   before_save :set_default_rounds
+  before_save :set_match_purse
+  before_save :set_split_purses
 
+  def set_split_purses
+    self.fighter_1_split ||= 0.5
+    self.fighter_2_split ||= 0.5
+  end
+  def set_match_purse
+    self.match_purse ||=
+      case highest_rank
+      when 1..3
+        if fighter_1.past_champion? || fighter_2.past_champion? || fighter_1.current_champion? || fighter_2.current_champion?
+          (rand(1..20) + 10) * 1000
+        elsif fighter_1.current_champion? && fighter_2.current_champion?
+          (rand(1..20) + 12) * 1000
+        else
+          rand(1..20) * 1000
+        end
+      when 4..6
+        rand(1..12) * 1000
+      when 7..9
+        rand(1..10) * 1000
+      else
+        rand(1..8) * 1000
+      end
+  end
   def set_weight_class
     higher_weight = [fighter_1.weight, fighter_2.weight].max
     self.weight_class = WeightClass.find_highest_class_for_weight(higher_weight)
@@ -270,15 +295,21 @@ class Match < ApplicationRecord
     end
   end
 
+  def lowest_rank
+    [self.fighter_1.rank, self.fighter_2.rank].min
+  end
+
+  def highest_rank
+    [self.fighter_1.rank, self.fighter_2.rank].max
+  end
   private
 
   def set_default_rounds
     # Assuming you have access to the ranks of the current fighters
-    lowest_rank = [self.fighter_1.rank, self.fighter_2.rank].min
 
     # Set default_rounds based on the highest rank
     self.max_rounds ||=
-      case lowest_rank
+      case self.lowest_rank
       when 1..3
         15
       when 4..6
