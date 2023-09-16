@@ -268,6 +268,7 @@ class Match < ApplicationRecord
     self.decision! unless self.ko?
 
     self.completed!
+    self.payout
     # Save the match with the final scores and winner_id set
     self.save
 
@@ -275,6 +276,10 @@ class Match < ApplicationRecord
     self.weight_class.update_fighter_ranks
   end
 
+  def payout
+    fighter_1.ledger.create(description: "Fight purse for match against #{self.fighter_2.name}", amount: self.fighter_1_split * self.match_purse, transaction_date: Time.now)
+    fighter_2.ledger.create(description: "Fight purse for match against #{self.fighter_1.name}", amount: self.fighter_2_split * self.match_purse, transaction_date: Time.now)
+  end
   def reset_match
     self.fighter_1_final_score = nil
     self.fighter_2_final_score = nil
