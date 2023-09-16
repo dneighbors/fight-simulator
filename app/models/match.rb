@@ -329,7 +329,7 @@ class Match < ApplicationRecord
   end
 
   def most_matches
-    [self.fighter_1.matches.count, self.fighter_2.matches.count].max
+    [self.fighter_1.total_matches, self.fighter_2.total_matches].max
   end
 
   private

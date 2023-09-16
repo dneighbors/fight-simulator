@@ -69,6 +69,10 @@ class Fighter < ApplicationRecord
     won_matches.count
   end
 
+  def total_matches
+    matches_as_fighter_1.count + matches_as_fighter_2.count
+  end
+
   def losses
     # Count matches where the fighter participated but did not win
     # and the match is completed and not a draw
