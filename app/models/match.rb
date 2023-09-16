@@ -37,6 +37,26 @@ class Match < ApplicationRecord
       else
         rand(1..8) * 1000
       end
+    modifer =
+      case most_matches
+      when 10..15
+        4
+      when 16..20
+        5
+      when 21..25
+        6
+      when 26..30
+        7
+      when 31..35
+        8
+      when 36..40
+        9
+      when 41..45
+        10
+      else
+        2
+      end
+    self.match_purse *= modifer
   end
   def set_weight_class
     higher_weight = [fighter_1.weight, fighter_2.weight].max
@@ -307,6 +327,11 @@ class Match < ApplicationRecord
   def highest_rank
     [self.fighter_1.rank, self.fighter_2.rank].max
   end
+
+  def most_matches
+    [self.fighter_1.matches.count, self.fighter_2.matches.count].max
+  end
+
   private
 
   def set_default_rounds
