@@ -107,6 +107,10 @@ class Fighter < ApplicationRecord
     titles.where(lost_at: nil).exists?
   end
 
+  def total_winnings
+    self.ledger_entries.where("amount > 0").sum(:amount)
+  end
+
   def past_champion?
     titles.where.not(lost_at: nil).exists?
   end
