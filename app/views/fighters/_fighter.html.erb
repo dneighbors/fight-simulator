@@ -59,6 +59,13 @@
       </p>
     <% end %>
 
+    <h2 class="mt-5 text-xl font-bold text-gray-900">Earnings / Ledger</h2>
+    <p class="mb-1 mt-1 font-bold">Lifetime Earnings: <%= number_to_currency(fighter.total_winnings, precision: 0) %></p>
+    <% fighter.ledgers.each do |ledger| %>
+      <p class="mb-1 mt-1"><%= "#{ledger.transaction_date} #{ledger.description}: #{number_to_currency(ledger.amount, precision: 0)}"  %></p>
+    <% end %>
+
+
 
   </div>
 

@@ -6,6 +6,8 @@ class Fighter < ApplicationRecord
   belongs_to :weight_class
   has_many :weight_classes, through: :weight_class_ranks
   has_many :weight_class_ranks
+  has_many :ledgers
+
 
   attribute :name, default: -> { random_name }
   attribute :nickname, default: -> { random_nickname }
@@ -108,7 +110,7 @@ class Fighter < ApplicationRecord
   end
 
   def total_winnings
-    self.ledger_entries.where("amount > 0").sum(:amount)
+    self.ledgers.where("amount > 0").sum(:amount)
   end
 
   def past_champion?
