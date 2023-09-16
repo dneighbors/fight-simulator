@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_16_044545) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_16_162315) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,6 +31,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_16_044545) do
     t.integer "previous_rank"
     t.integer "highest_rank"
     t.index ["weight_class_id"], name: "index_fighters_on_weight_class_id"
+  end
+
+  create_table "ledgers", force: :cascade do |t|
+    t.bigint "fighter_id", null: false
+    t.string "description"
+    t.decimal "amount"
+    t.date "transaction_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fighter_id"], name: "index_ledgers_on_fighter_id"
   end
 
   create_table "matches", force: :cascade do |t|
@@ -89,6 +99,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_16_044545) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "ledgers", "fighters"
   add_foreign_key "rounds", "matches"
   add_foreign_key "weight_class_ranks", "fighters"
   add_foreign_key "weight_class_ranks", "weight_classes"
