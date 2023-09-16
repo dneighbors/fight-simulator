@@ -112,6 +112,27 @@ namespace :playtest do
     end
   end
 
+  namespace :create do
+    desc "Set payouts for all matches and pay all fighters."
+    task payouts: :environment do
+      puts "destroying all ledgers"
+      #wipe all ledgers for the fighters
+      Ledger.destroy_all
+
+      #find completed matches
+      completed_matches = Match.where(status_id: "completed")
+      puts "found #{completed_matches.count} completed matches"
+
+      completed_matches.each do |match|
+        #set the match purse if nil
+        match.set_match_purse
+        match.set_split_purses
+        match.payout
+      end
+
+    end
+  end
+
   namespace :destroy do
     desc "Destroy all fighters and matches and rounds"
     task all: :environment do

@@ -277,8 +277,8 @@ class Match < ApplicationRecord
   end
 
   def payout
-    fighter_1.ledger.create(description: "Fight purse for match against #{self.fighter_2.name}", amount: self.fighter_1_split * self.match_purse, transaction_date: Time.now)
-    fighter_2.ledger.create(description: "Fight purse for match against #{self.fighter_1.name}", amount: self.fighter_2_split * self.match_purse, transaction_date: Time.now)
+    self.fighter_1.ledgers.create(description: "Fight purse for match against #{self.fighter_2.name}", amount: self.fighter_1_split * self.match_purse, transaction_date: Time.now)
+    self.fighter_2.ledgers.create(description: "Fight purse for match against #{self.fighter_1.name}", amount: self.fighter_2_split * self.match_purse, transaction_date: Time.now)
   end
   def reset_match
     self.fighter_1_final_score = nil
