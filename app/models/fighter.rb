@@ -63,10 +63,7 @@ class Fighter < ApplicationRecord
     ability_score
   end
   def self.roll_base_endurance
-    tens_column = rand(1..10) * 10  # Roll the tens column die and get a value in the tens range
-    ones_column = rand(1..10)        # Roll the ones column die and get a value in the ones range
-    number = tens_column + ones_column  # Combine the tens and ones columns
-    number
+    rand(10..100)
   end
   def wins
     won_matches.count
