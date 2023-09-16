@@ -21,9 +21,12 @@
         <!-- Content for the first column (45%) -->
         <%= render partial: "fighters/fighter_card", locals: { fighter: @match.fighter_1 } %>
       </div>
-      <div class="w-1/5 mx-auto flex items-center justify-center">
+      <div class="w-1/5 mx-auto flex flex-col items-center justify-center">
         <!-- Content for the second column (10%) -->
-        <p class="text-center text-3xl font-bold">VS</p>
+        <div class="text-center text-3xl font-bold">VS</div>
+        <div class="mt-3 text-center"><%= @match.max_rounds %> Rounds</div>
+        <div class="mt-3 text-center font-bold">Purse</div>
+        <div><%= number_to_currency(@match.match_purse, precision: 0) %></div>
       </div>
       <div class="w-2/5 mx-auto">
         <!-- Content for the third column (45%) -->
