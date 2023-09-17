@@ -16,8 +16,36 @@ class Match < ApplicationRecord
   before_save :set_split_purses
 
   def set_split_purses
-    self.fighter_1_split ||= 0.5
-    self.fighter_2_split ||= 0.5
+    # Determine the fighters' ranks (you may need to adjust how you retrieve ranks)
+    fighter_1_rank = fighter_1.rank
+    fighter_2_rank = fighter_2.rank
+
+    # Check if both fighters have no rank (default to 50/50 split)
+    if fighter_1_rank.nil? && fighter_2_rank.nil?
+      self.fighter_1_split ||= 0.5
+      self.fighter_2_split ||= 0.5
+    else
+      # Generate random percentages
+      random_percentage = (rand(1..100)/100)
+
+      # Determine the split based on ranks and random percentages
+      if fighter_1_rank.nil?
+        self.fighter_1_split ||= 0.5
+        self.fighter_2_split ||= 1.0 - self.fighter_1_split
+      elsif fighter_2_rank.nil?
+        self.fighter_2_split ||= 0.5
+        self.fighter_1_split ||= 1.0 - self.fighter_2_split
+      else
+        # Both fighters have ranks
+        if fighter_1_rank > fighter_2_rank
+          self.fighter_1_split ||= random_percentage
+          self.fighter_2_split ||= 1.0 - random_percentage
+        else
+          self.fighter_2_split ||= random_percentage
+          self.fighter_1_split ||= 1.0 - random_percentage
+        end
+      end
+    end
   end
   def set_match_purse
     self.match_purse ||=
