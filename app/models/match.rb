@@ -71,10 +71,55 @@ class Match < ApplicationRecord
     rand(1..20)
   end
 
+  def punch_roll(offensive_fighter)
+    roll = Match.roll_d20
+    case offensive_fighter.punch
+    when 3..6
+      roll -= 2
+    when 7..10
+      roll -= 1
+    when 11..14
+      roll -= 0
+    when 15..17
+      roll += 1
+    when 18..20
+      roll += 2
+    when 21..35
+      roll += 3
+    when 36..45
+      roll += 4
+    else
+      0
+    end
+    roll
+  end
+
+  def adjust_dexterity(defensive_fighter)
+    modified_dexterity = defensive_fighter.dexterity
+    case defensive_fighter.dexterity
+    when 3..6
+      modified_dexterity -= 2
+    when 7..10
+      modified_dexterity -= 1
+    when 11..14
+      modified_dexterity -= 0
+    when 15..17
+      modified_dexterity += 1
+    when 18..20
+      modified_dexterity += 2
+    when 21..35
+      modified_dexterity += 3
+    when 36..45
+      modified_dexterity += 4
+    else
+      0
+    end
+    modified_dexterity
+  end
   def punch(offensive_fighter, defensive_fighter, round, fighter_number)
 
     return "#{offensive_fighter.name} lays on mat lifeless." if winner_id.present?
-    roll = Match.roll_d20
+    roll = punch_roll(offensive_fighter)
 
     damage = calculate_damage(offensive_fighter, defensive_fighter)
 
@@ -168,7 +213,9 @@ class Match < ApplicationRecord
   end
 
   def dexterity_modifier(defensive_fighter)
-    case defensive_fighter.dexterity
+    modified_dexterity = adjust_dexterity(defensive_fighter)
+
+    case modified_dexterity
     when 1..9
       1
     when 10..14
