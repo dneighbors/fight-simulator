@@ -20,6 +20,7 @@ class Fighter < ApplicationRecord
   attribute :base_endurance, default: -> { roll_base_endurance }
 
   after_initialize :set_endurance
+  after_initialize :set_endurance_round
   after_initialize :set_weight_class
   after_create :set_rankings
 
@@ -41,6 +42,34 @@ class Fighter < ApplicationRecord
 
   def set_endurance
     self.endurance ||= self.base_endurance
+  end
+
+  def set_endurance_round
+    self.endurance_round ||=
+      case self.base_endurance
+      when 0..25
+        rand(1..4)
+      when 26..50
+        rand (1..6)
+      when 51..75
+        rand(1..8)
+      when 76..100
+        rand(1..10)
+      when 101.170
+        rand(1..12)
+      when 171..200
+        rand(1..12) + 3
+      when 201.300
+        rand(1..10) + 5
+      when 301..400
+        rand(1..8) + 7
+      when 401..500
+        rand(1..6) + 9
+      when 501..600
+        rand(1..4) + 11
+      else
+        15
+      end
   end
 
   def set_weight_class
