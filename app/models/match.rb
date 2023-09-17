@@ -71,9 +71,10 @@ class Match < ApplicationRecord
     rand(1..20)
   end
 
-  def punch_roll(offensive_fighter)
+  def punch_roll(offensive_fighter, offensive_penalty)
     roll = Match.roll_d20
-    case offensive_fighter.punch
+    adjusted_punch = offensive_fighter.punch + offensive_penalty
+    case adjusted_punch
     when 3..6
       roll -= 2
     when 7..10
@@ -94,10 +95,10 @@ class Match < ApplicationRecord
     roll
   end
 
-  def adjust_dexterity(defensive_fighter)
-    modified_dexterity = defensive_fighter.dexterity
+  def adjust_dexterity(defensive_fighter, defensive_penalty)
+    modified_dexterity = defensive_fighter.dexterity + defensive_penalty
     case defensive_fighter.dexterity
-    when 3..6
+    when 1..6
       modified_dexterity -= 2
     when 7..10
       modified_dexterity -= 1
@@ -116,12 +117,25 @@ class Match < ApplicationRecord
     end
     modified_dexterity
   end
+
+  def set_endurance_penalty(fighter, round)
+    penalty = fighter.endurance_round - round
+    if penalty < 0
+      penalty
+    else
+      0
+    end
+  end
+
   def punch(offensive_fighter, defensive_fighter, round, fighter_number)
 
     return "#{offensive_fighter.name} lays on mat lifeless." if winner_id.present?
-    roll = punch_roll(offensive_fighter)
+    offensive_penalty = set_endurance_penalty(offensive_fighter, round)
+    defensive_penalty = set_endurance_penalty(defensive_fighter, round)
 
-    damage = calculate_damage(offensive_fighter, defensive_fighter)
+    roll = punch_roll(offensive_fighter, offensive_penalty)
+
+    damage = calculate_damage(offensive_fighter, defensive_fighter, offensive_penalty, defensive_penalty)
 
     case roll
     when 1..5
@@ -155,7 +169,7 @@ class Match < ApplicationRecord
       reduce_health(defensive_fighter, damage)
       round.fighter_1_knockdowns += 1 if fighter_number == 1
       round.fighter_2_knockdowns += 1 if fighter_number == 2
-      knockout = determine_knockout(defensive_fighter, damage)
+      knockout = determine_knockout(defensive_fighter, damage, defensive_penalty)
       score_round(round, fighter_number, damage)
       if knockout
         end_match(offensive_fighter, defensive_fighter, damage)
@@ -185,14 +199,14 @@ class Match < ApplicationRecord
     defensive_fighter.save!
   end
 
-  def calculate_damage(offensive_fighter, defensive_fighter)
-    damage = punch_strength(offensive_fighter)
-    damage_modifier = dexterity_modifier(defensive_fighter)
+  def calculate_damage(offensive_fighter, defensive_fighter, offensive_penalty, defensive_penalty)
+    damage = punch_strength(offensive_fighter, offensive_penalty)
+    damage_modifier = dexterity_modifier(defensive_fighter, defensive_penalty)
     (damage * damage_modifier).round
   end
 
-  def determine_knockout(defensive_fighter, damage)
-    case defensive_fighter.speed
+  def determine_knockout(defensive_fighter, damage, defensive_penalty)
+    case defensive_fighter.speed + defensive_penalty
     when 3..13
       true
     when 14..17
@@ -212,8 +226,8 @@ class Match < ApplicationRecord
     end
   end
 
-  def dexterity_modifier(defensive_fighter)
-    modified_dexterity = adjust_dexterity(defensive_fighter)
+  def dexterity_modifier(defensive_fighter, defensive_penalty)
+    modified_dexterity = adjust_dexterity(defensive_fighter, defensive_penalty)
 
     case modified_dexterity
     when 1..9
@@ -231,8 +245,9 @@ class Match < ApplicationRecord
     end
   end
 
-  def punch_strength(offensive_fighter)
-    case offensive_fighter.strength
+  def punch_strength(offensive_fighter,offensive_penalty)
+    strength = offensive_fighter.strength + offensive_penalty
+    case strength
     when 3..6
       rand(1..4)
     when 7..10
