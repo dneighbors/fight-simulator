@@ -20,13 +20,18 @@ class Match < ApplicationRecord
     fighter_1_rank = fighter_1.rank
     fighter_2_rank = fighter_2.rank
 
+    puts "Fighter 1 Rank: #{fighter_1_rank}"
+    puts "Fighter 2 Rank: #{fighter_2_rank}"
+
     # Check if both fighters have no rank (default to 50/50 split)
     if fighter_1_rank.nil? && fighter_2_rank.nil?
+      puts "Both fighters have no rank 50/50 split"
       self.fighter_1_split ||= 0.5
       self.fighter_2_split ||= 0.5
     else
       # Generate random percentages
-      random_percentage = (rand(1..100)/100)
+      random_percentage = (rand(1.0..100.0)/100)
+      puts "Random Percentage: #{random_percentage}"
 
       # Determine the split based on ranks and random percentages
       if fighter_1_rank.nil?
@@ -166,17 +171,19 @@ class Match < ApplicationRecord
 
     damage = calculate_damage(offensive_fighter, defensive_fighter, offensive_penalty, defensive_penalty)
 
+    debug = true
+    debug = "#{offensive_fighter.name} rolled a #{roll}. Punch: #{offensive_fighter.punch} Penalty: #{offensive_penalty}"
     case roll
     when 1..5
       score_round(round, fighter_number, 0)
-      "missed."
+      "missed. #{debug if debug}"
     when 6..10
       score_round(round, fighter_number, damage)
       reduce_health(defensive_fighter, damage)
       if defensive_fighter.endurance <= 0
         end_match(offensive_fighter, defensive_fighter, damage)
       else
-        "landed a body blow. #{defensive_fighter.name} takes #{damage} damage."
+        "landed a body blow. #{defensive_fighter.name} takes #{damage} damage. #{debug if debug}"
       end
     when 11..15
       score_round(round, fighter_number, damage)
@@ -184,7 +191,7 @@ class Match < ApplicationRecord
       if defensive_fighter.endurance <= 0
         end_match(offensive_fighter, defensive_fighter, damage)
       else
-        "stuck a jab. #{defensive_fighter.name} takes #{damage} damage."
+        "stuck a jab. #{defensive_fighter.name} takes #{damage} damage. #{debug if debug}"
       end
     when 16..18
       score_round(round, fighter_number, damage)
@@ -192,7 +199,7 @@ class Match < ApplicationRecord
       if defensive_fighter.endurance <= 0
         end_match(offensive_fighter, defensive_fighter, damage)
       else
-        "solid head shot. #{defensive_fighter.name} takes #{damage} damage."
+        "solid head shot. #{defensive_fighter.name} takes #{damage} damage. #{debug if debug}"
       end
     when 19..20
       reduce_health(defensive_fighter, damage)
@@ -203,10 +210,10 @@ class Match < ApplicationRecord
       if knockout
         end_match(offensive_fighter, defensive_fighter, damage)
       else
-        "KNOCKED #{defensive_fighter.name} DOWN. #{defensive_fighter.name} takes #{damage} damage."
+        "KNOCKED #{defensive_fighter.name} DOWN. #{defensive_fighter.name} takes #{damage} damage. #{debug if debug}"
       end
     else
-      "WTF?"
+      "WTF? #{debug if debug}. This should never happen."
     end
   end
 
