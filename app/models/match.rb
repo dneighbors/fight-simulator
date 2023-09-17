@@ -90,7 +90,7 @@ class Match < ApplicationRecord
     when 36..45
       roll += 4
     else
-      0
+      1
     end
     roll
   end
@@ -130,8 +130,8 @@ class Match < ApplicationRecord
   def punch(offensive_fighter, defensive_fighter, round, fighter_number)
 
     return "#{offensive_fighter.name} lays on mat lifeless." if winner_id.present?
-    offensive_penalty = set_endurance_penalty(offensive_fighter, round)
-    defensive_penalty = set_endurance_penalty(defensive_fighter, round)
+    offensive_penalty = set_endurance_penalty(offensive_fighter, round.round_number)
+    defensive_penalty = set_endurance_penalty(defensive_fighter, round.round_number)
 
     roll = punch_roll(offensive_fighter, offensive_penalty)
 
