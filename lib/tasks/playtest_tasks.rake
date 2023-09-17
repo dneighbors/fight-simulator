@@ -133,6 +133,18 @@ namespace :playtest do
     end
   end
 
+  namespace :create do
+    desc "Set endurance rounds for all fighters where not currently set"
+    task endurance_round: :environment do
+      puts "setting endurance round"
+      Fighter.all.each do |fighter|
+        fighter.set_endurance_round
+        puts "#{fighter.name} endurance rounds set to #{fighter.endurance_round}"
+        fighter.save!
+      end
+    end
+  end
+
   namespace :destroy do
     desc "Destroy all fighters and matches and rounds"
     task all: :environment do
