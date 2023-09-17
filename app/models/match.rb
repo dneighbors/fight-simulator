@@ -120,6 +120,7 @@ class Match < ApplicationRecord
     else
       1
     end
+    roll = 1 if roll < 1
     roll
   end
 
