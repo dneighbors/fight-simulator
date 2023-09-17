@@ -123,7 +123,7 @@ class Match < ApplicationRecord
     when 36..45
       roll += 4
     else
-      1
+      roll -= 2
     end
     roll = 1 if roll < 1
     roll
