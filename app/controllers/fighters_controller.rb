@@ -3,7 +3,13 @@ class FightersController < ApplicationController
 
   # GET /fighters or /fighters.json
   def index
-    @fighters = Fighter.order(:weight_class_id, :name)
+    if params[:current_champs] == 'true'
+      @fighters = Fighter.where(id: Title.where(lost_at: nil).select(:fighter_id)).order(:weight_class_id, :name)
+    elsif params[:top_money] == 'true'
+      @fighters = Fighter.all.sort_by { |fighter| -fighter.total_winnings }.take(10)
+    else
+      @fighters = Fighter.order(:weight_class_id, :name)
+    end
   end
 
   # GET /fighters/1 or /fighters/1.json
