@@ -53,7 +53,7 @@
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_to_currency(fighter.total_winnings, precision: 0) %></td>
                 <% if fighter.current_champion? %>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 relative group">
-                      <%= fighter.titles_list %>
+                      <%= fighter.current_titles_list %>
                   </td>
                 <% else %>
                   <td>&nbsp;</td>

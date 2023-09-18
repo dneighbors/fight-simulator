@@ -135,9 +135,18 @@ class Fighter < ApplicationRecord
     titles.map(&:name).join(', ')
   end
 
-  def current_champion?
-    titles.where(lost_at: nil).exists?
+  def current_titles_list
+    current_titles.map(&:name).join(', ')
   end
+
+  def current_titles
+    titles.where(lost_at: nil)
+  end
+
+  def current_champion?
+    current_titles.exists?
+  end
+
 
   def total_winnings
     self.ledgers.where("amount > 0").sum(:amount)
