@@ -21,13 +21,17 @@
 
     <% if fighter.pending_matches.blank? %>
       <p class="mb-1 mt-1">No Matches Scheduled.</p>
-      <p class="font-bold">Suggested Opponents</p>
-      <ul>
-        <% fighter.suggested_opponents.each do |opponent| %>
-          <li><%= link_to opponent.name, fighter_url(opponent), class: "text-blue-500 hover:underline" %> (Rank <%= opponent.rank %>) -> <%= link_to "Schedule Match", new_match_url(fighter_1_id: fighter.id, fighter_2_id: opponent.id, weight_class_id: fighter.weight_class.id), class: "text-blue-500 hover:underline" %></li>
-        <% end %>
-
-      </p>
+      <% opponents = fighter.suggested_opponents %>
+      <% if opponents.nil? %>
+        <p class="font-bold">Suggested Opponents</p>
+        <ul>
+          <% fighter.suggested_opponents.each do |opponent| %>
+            <li><%= link_to opponent.name, fighter_url(opponent), class: "text-blue-500 hover:underline" %> (Rank <%= opponent.rank %>) -> <%= link_to "Schedule Match", new_match_url(fighter_1_id: fighter.id, fighter_2_id: opponent.id, weight_class_id: fighter.weight_class.id), class: "text-blue-500 hover:underline" %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="mb-1 mt-1"><%= link_to "Schedule one.", new_match_url(fighter_1_id: fighter.id, weight_class_id: fighter.weight_class.id), class: "text-blue-500 hover:underline" %></p>
+      <% end %>
     <% else %>
       <% fighter.pending_matches.each do |match| %>
         <% opponent = match.opponent(fighter) %>
