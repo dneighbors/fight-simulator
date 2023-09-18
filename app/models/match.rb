@@ -201,7 +201,7 @@ class Match < ApplicationRecord
       else
         "solid head shot. #{defensive_fighter.name} takes #{damage} damage. #{debug if debug}"
       end
-    when 19..20
+    when 19..30
       reduce_health(defensive_fighter, damage)
       round.fighter_1_knockdowns += 1 if fighter_number == 1
       round.fighter_2_knockdowns += 1 if fighter_number == 2
