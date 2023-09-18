@@ -65,6 +65,7 @@
           <%= match.rounds.count.ordinalize %> Round Decision (<%= match.fighter_1_final_score %>
           to <%= match.fighter_2_final_score %>)
         <% end %>
+        [<%= link_to "View", match_url(match), class: "text-blue-500 hover:underline" %>]
       </p>
     <% end %>
 

@@ -53,7 +53,9 @@ class Match < ApplicationRecord
     end
   end
   def set_match_purse
-    self.match_purse ||=
+    return if self.match_purse.present? # Exit if match_purse is already set
+
+    self.match_purse =
       case highest_rank
       when 1..3
         if fighter_1.past_champion? || fighter_2.past_champion? || fighter_1.current_champion? || fighter_2.current_champion?
