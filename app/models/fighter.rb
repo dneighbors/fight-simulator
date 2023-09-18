@@ -149,6 +149,27 @@ class Fighter < ApplicationRecord
   def rank
     self.weight_class.weight_class_ranks.find_by(fighter_id: self.id)&.rank_number
   end
+
+  def suggested_opponents
+    fighters_in_weight_class = Fighter.where(weight_class_id: self.weight_class_id)
+    potential_opponents = fighters_in_weight_class.where.not(id: self.id)
+
+    # Exclude fighters with whom the current fighter has had matches
+    potential_opponents = potential_opponents.where.not(id: self.matches_as_fighter_1.pluck(:fighter_2_id) + self.matches_as_fighter_2.pluck(:fighter_1_id))
+
+    # Exclude fighters who are already in pending scheduled matches
+
+    pending_match_fighter_ids = Match.where(weight_class_id: self.weight_class_id, status_id: 0).pluck(:fighter_1_id, :fighter_2_id).flatten.uniq
+    potential_opponents = potential_opponents.where.not(id: pending_match_fighter_ids)
+
+    # Calculate the rank difference for each fighter and order by it
+    potential_opponents  = potential_opponents.sort_by do |fighter|
+      (fighter.rank - self.rank).abs
+    end
+
+    potential_opponents
+  end
+
   def update_endurance
     additional_endurance = Fighter.roll_base_endurance
     new_endurance = self.endurance + additional_endurance

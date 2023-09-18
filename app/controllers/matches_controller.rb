@@ -18,6 +18,7 @@ class MatchesController < ApplicationController
   def new
     @match = Match.new
     @match.fighter_1 = Fighter.find(params[:fighter_1_id]) if params[:fighter_1_id].present?
+    @match.fighter_2 = Fighter.find(params[:fighter_2_id]) if params[:fighter_2_id].present?
     if params[:weight_class_id].present?
       @fighters = Fighter.where(weight_class_id: params[:weight_class_id])
     else

@@ -68,7 +68,12 @@
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= link_to last_opponent&.name, fighter_url(last_opponent), class: "text-blue-500 hover:underline" %></td>
                 <% end %>
                 <% if next_opponent.nil? %>
-                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">TBA. <%= link_to "Schedule One", new_match_url(fighter_1_id: fighter.id, weight_class_id: @weight_class.id), class: "text-blue-500 hover:underline" %></td>
+                  <% suggested_opponent = fighter.suggested_opponents.first %>
+                  <% if suggested_opponent %>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= link_to "Schedule #{suggested_opponent.name}", new_match_url(fighter_1_id: fighter.id, fighter_2_id: suggested_opponent.id, weight_class_id: @weight_class.id), class: "text-blue-500 hover:underline" %></td>
+                  <% else %>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= link_to "Schedule One", new_match_url(fighter_1_id: fighter.id, weight_class_id: @weight_class.id), class: "text-blue-500 hover:underline" %></td>
+                  <% end %>
                 <% else %>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= link_to next_opponent&.name, fighter_url(next_opponent), class: "text-blue-500 hover:underline" %></td>
                 <% end %>
