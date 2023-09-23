@@ -203,12 +203,24 @@ namespace :playtest do
       Fighter.destroy_all
     end
   end
+
   namespace :create do
-    desc 'Generate 100 random fighters'
+    desc 'Generate set number for fighters per weight class'
     task fighters: :environment do
-      100.times do
-        fighter = Fighter.create!
-        puts "Created fighter #{fighter.name} : #{fighter.weight_class.name}"
+      WeightClass.all.each do |weight_class|
+        puts "Number of fighters in #{weight_class.name}: #{weight_class.fighters.count}"
+        desired_num_fighters = 12
+        num_fighters_to_create = desired_num_fighters - weight_class.fighters.count
+        weight = weight_class.max_weight - 2
+
+        if num_fighters_to_create > 0
+          puts "  Creating Fighters for #{weight_class.name}"
+          num_fighters_to_create.times do
+            fighter = Fighter.create!(weight: weight)
+            puts "     Created fighter #{fighter.name} : #{fighter.weight_class.name} #{fighter.weight}"
+          end
+        end
+
       end
     end
   end
@@ -224,6 +236,18 @@ namespace :playtest do
     desc "Create a fight card for the next event"
     task fight_card: :environment do
       create_fight_card
+    end
+  end
+
+  namespace :play do
+    desc "Play through ALL possible combinations of unplayed match ups by weight class"
+    task all_combinations: :environment do
+      loop do
+        create_fight_card
+        break if Match.where(status_id: Match.status_ids['pending']).empty?
+
+        play_unplayed_matches
+      end
     end
   end
 
