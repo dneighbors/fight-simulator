@@ -1,4 +1,54 @@
 namespace :playtest do
+
+  def create_fight_card
+    WeightClass.all.each do |weight_class|
+      puts "Adding #{weight_class.name} matches to fight card."
+      lowest_ranked_fighter_with_suggested_opponent = weight_class.fighters.sort_by(&:rank).reverse.find do |fighter|
+        !fighter.suggested_opponents.empty?
+      end
+
+      if lowest_ranked_fighter_with_suggested_opponent
+        suggested_opponent = lowest_ranked_fighter_with_suggested_opponent.suggested_opponents.first
+
+        Match.create!(
+          fighter_1: lowest_ranked_fighter_with_suggested_opponent,
+          fighter_2: suggested_opponent,
+          status_id: 0,
+          weight_class: weight_class
+        )
+        puts "Match Added: #{lowest_ranked_fighter_with_suggested_opponent.name} (#{lowest_ranked_fighter_with_suggested_opponent&.rank}) vs. #{suggested_opponent.name} (#{suggested_opponent&.rank})"
+
+      else
+        puts "No fighters with a suggested opponent found in #{weight_class.name} weight class."
+      end
+    end
+  end
+
+  def play_unplayed_matches
+    Match.where(status_id: Match.status_ids['pending']).each do |match|
+      match.training
+      rounds = match.max_rounds || 4
+      (1..rounds).each do |round|
+        if match.winner_id.nil?
+          new_round = match.rounds.build(round_number: round)
+          match.punch(match.fighter_1, match.fighter_2, new_round, 1)
+          match.punch(match.fighter_2, match.fighter_1, new_round, 2)
+          puts "Round Score: #{match.fighter_1.name} : #{new_round.fighter_1_points} - #{match.fighter_2.name} : #{new_round.fighter_2_points}"
+        end
+      end
+      match.score_match
+      match.training
+
+      if match.winner_id.nil?
+        puts "Match is a draw!"
+      else
+        puts "Winner: #{match.winner&.name}"
+      end
+      puts "#{match.fighter_1.name} : #{match.fighter_1_final_score}"
+      puts "#{match.fighter_2.name} : #{match.fighter_2_final_score}"
+    end
+  end
+
   namespace :reset do
     desc "Reset all matches"
     task matches: :environment do
@@ -166,55 +216,14 @@ namespace :playtest do
   namespace :play do
     desc "Play all unplayed matches in the database"
     task matches: :environment do
-      Match.where(status_id: Match.status_ids['pending']).each do |match|
-        match.training
-        rounds = match.max_rounds || 4
-        (1..rounds).each do |round|
-          if match.winner_id.nil?
-            new_round = match.rounds.build(round_number: round)
-            match.punch(match.fighter_1, match.fighter_2, new_round, 1)
-            match.punch(match.fighter_2, match.fighter_1, new_round, 2)
-            puts "Round Score: #{match.fighter_1.name} : #{new_round.fighter_1_points} - #{match.fighter_2.name} : #{new_round.fighter_2_points}"
-          end
-        end
-        match.score_match
-        match.training
-
-        if match.winner_id.nil?
-          puts "Match is a draw!"
-        else
-          puts "Winner: #{match.winner&.name}"
-        end
-        puts "#{match.fighter_1.name} : #{match.fighter_1_final_score}"
-        puts "#{match.fighter_2.name} : #{match.fighter_2_final_score}"
-      end
+      play_unplayed_matches
     end
   end
 
   namespace :create do
     desc "Create a fight card for the next event"
     task fight_card: :environment do
-      WeightClass.all.each do |weight_class|
-        puts "Adding #{weight_class.name} matches to fight card."
-        lowest_ranked_fighter_with_suggested_opponent = weight_class.fighters.sort_by(&:rank).reverse.find do |fighter|
-          !fighter.suggested_opponents.empty?
-        end
-
-        if lowest_ranked_fighter_with_suggested_opponent
-          suggested_opponent = lowest_ranked_fighter_with_suggested_opponent.suggested_opponents.first
-
-          Match.create!(
-            fighter_1: lowest_ranked_fighter_with_suggested_opponent,
-            fighter_2: suggested_opponent,
-            status_id: 0,
-            weight_class: weight_class
-          )
-          puts "Match Added: #{lowest_ranked_fighter_with_suggested_opponent.name} (#{lowest_ranked_fighter_with_suggested_opponent&.rank}) vs. #{suggested_opponent.name} (#{suggested_opponent&.rank})"
-
-        else
-          puts "No fighters with a suggested opponent found in #{weight_class.name} weight class."
-        end
-      end
+      create_fight_card
     end
   end
 
