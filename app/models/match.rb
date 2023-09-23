@@ -29,25 +29,37 @@ class Match < ApplicationRecord
       self.fighter_1_split ||= 0.5
       self.fighter_2_split ||= 0.5
     else
-      # Generate random percentages
-      random_percentage = (rand(1.0..100.0)/100)
-      puts "Random Percentage: #{random_percentage}"
+
 
       # Determine the split based on ranks and random percentages
       if fighter_1_rank.nil?
-        self.fighter_1_split ||= 0.5
-        self.fighter_2_split ||= 1.0 - self.fighter_1_split
+        self.fighter_1_split ||= 0.1
+        self.fighter_2_split ||= 0.9
       elsif fighter_2_rank.nil?
-        self.fighter_2_split ||= 0.5
-        self.fighter_1_split ||= 1.0 - self.fighter_2_split
+        self.fighter_2_split ||= 0.1
+        self.fighter_1_split ||= 0.9
       else
         # Both fighters have ranks
-        if fighter_1_rank > fighter_2_rank
-          self.fighter_1_split ||= random_percentage
-          self.fighter_2_split ||= 1.0 - random_percentage
+        # Calculate the rank difference
+        rank_difference = (fighter_1_rank - fighter_2_rank).abs
+
+        # Calculate the base split percentage (50%)
+        base_split = 0.5
+
+        # Calculate the split factor based on rank difference
+        split_factor = (rank_difference + 1) * 0.065  # Adjust this factor as needed
+
+        # Ensure the split factor is within the range [0, 0.5]
+        split_factor = [split_factor, 0.5].min
+        split_factor = [split_factor, 0.0].max
+
+        # Assign splits based on fighter ranks
+        if fighter_1_rank < fighter_2_rank
+          self.fighter_1_split ||= base_split + split_factor
+          self.fighter_2_split ||= base_split - split_factor
         else
-          self.fighter_2_split ||= random_percentage
-          self.fighter_1_split ||= 1.0 - random_percentage
+          self.fighter_2_split ||= base_split + split_factor
+          self.fighter_1_split ||= base_split - split_factor
         end
       end
     end
