@@ -116,15 +116,15 @@ namespace :playtest do
     desc "Set payouts for all matches and pay all fighters."
     task payouts: :environment do
       puts "destroying all ledgers"
-      #wipe all ledgers for the fighters
+      # wipe all ledgers for the fighters
       Ledger.destroy_all
 
-      #find completed matches
+      # find completed matches
       completed_matches = Match.where(status_id: "completed")
       puts "found #{completed_matches.count} completed matches"
 
       completed_matches.each do |match|
-        #set the match purse if nil
+        # set the match purse if nil
         match.set_match_purse
         match.set_split_purses
         match.payout
@@ -167,9 +167,9 @@ namespace :playtest do
   end
 
   namespace :play do
-    desc "Play all matches in the database"
+    desc "Play all unplayed matches in the database"
     task matches: :environment do
-      Match.all.each do |match|
+      Match.where(status_id: Match.status_ids['pending']).each do |match|
         match.training
         rounds = match.max_rounds || 4
         (1..rounds).each do |round|
@@ -190,6 +190,33 @@ namespace :playtest do
         end
         puts "#{match.fighter_1.name} : #{match.fighter_1_final_score}"
         puts "#{match.fighter_2.name} : #{match.fighter_2_final_score}"
+      end
+    end
+  end
+
+  namespace :create do
+    desc "Create a fight card for the next event"
+    task fight_card: :environment do
+      WeightClass.all.each do |weight_class|
+        puts "Adding #{weight_class.name} matches to fight card."
+        lowest_ranked_fighter_with_suggested_opponent = weight_class.fighters.sort_by(&:rank).reverse.find do |fighter|
+          !fighter.suggested_opponents.empty?
+        end
+
+        if lowest_ranked_fighter_with_suggested_opponent
+          suggested_opponent = lowest_ranked_fighter_with_suggested_opponent.suggested_opponents.first
+
+          Match.create!(
+            fighter_1: lowest_ranked_fighter_with_suggested_opponent,
+            fighter_2: suggested_opponent,
+            status_id: 0,
+            weight_class: weight_class
+          )
+          puts "Match Added: #{lowest_ranked_fighter_with_suggested_opponent.name} (#{lowest_ranked_fighter_with_suggested_opponent&.rank}) vs. #{suggested_opponent.name} (#{suggested_opponent&.rank})"
+
+        else
+          puts "No fighters with a suggested opponent found in #{weight_class.name} weight class."
+        end
       end
     end
   end

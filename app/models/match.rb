@@ -16,12 +16,14 @@ class Match < ApplicationRecord
   before_save :set_split_purses
 
   def set_split_purses
+    return if self.fighter_1_split.present? && self.fighter_2_split.present? # Exit if split purses are already set
+
     # Determine the fighters' ranks (you may need to adjust how you retrieve ranks)
     fighter_1_rank = fighter_1.rank
     fighter_2_rank = fighter_2.rank
 
-    puts "Fighter 1 Rank: #{fighter_1_rank}"
-    puts "Fighter 2 Rank: #{fighter_2_rank}"
+    Rails.logger.info "set_split_purse: Fighter 1 Rank: #{fighter_1_rank}"
+    Rails.logger.info "set_split_purse: Fighter 2 Rank: #{fighter_2_rank}"
 
     # Check if both fighters have no rank (default to 50/50 split)
     if fighter_1_rank.nil? && fighter_2_rank.nil?
