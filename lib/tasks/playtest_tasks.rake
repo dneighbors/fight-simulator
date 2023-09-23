@@ -157,11 +157,8 @@ namespace :playtest do
     desc 'Generate 100 random fighters'
     task fighters: :environment do
       100.times do
-        Fighter.create!(
-          name: Faker::Name.male_first_name + ' ' + Faker::Name.last_name,
-          nickname: Faker::Superhero.name,
-          birthplace: Faker::Address.city,
-        )
+        fighter = Fighter.create!
+        puts "Created fighter #{fighter.name} : #{fighter.weight_class.name}"
       end
     end
   end
