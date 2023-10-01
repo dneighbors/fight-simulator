@@ -13,7 +13,9 @@
 <main>
   <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
 
-    <p style="color: green"><%= notice %></p>
+    <% if notice %>
+      <p style="color: green" class="mb-10 w-full text-center"><%= notice %></p>
+    <% end %>
 
 <%= render @fighter %>
 

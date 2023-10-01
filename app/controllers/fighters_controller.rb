@@ -45,6 +45,15 @@ class FightersController < ApplicationController
 
   # PATCH/PUT /fighters/1 or /fighters/1.json
   def update
+    if params[:fighter][:buy_training_points] == "true"
+      if @fighter.buy_training_points
+        flash[:notice] = "Training points purchased!"
+      else
+        flash[:notice] = "Insufficient funds to purchase training points."
+      end
+      redirect_to @fighter and return
+    end
+
     respond_to do |format|
       if @fighter.update(fighter_params)
         format.html { redirect_to fighters_url, notice: "Fighter was successfully updated." }
@@ -67,13 +76,14 @@ class FightersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_fighter
-      @fighter = Fighter.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def fighter_params
-      params.require(:fighter).permit(:name, :nickname, :birthplace, :punch, :strength, :speed, :dexterity, :base_endurance, :endurance, :weight, :weight_class_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_fighter
+    @fighter = Fighter.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def fighter_params
+    params.require(:fighter).permit(:name, :nickname, :birthplace, :punch, :strength, :speed, :dexterity, :base_endurance, :endurance, :weight, :weight_class_id, :buy_training_points)
+  end
 end

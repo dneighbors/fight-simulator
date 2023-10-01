@@ -100,9 +100,37 @@ class Fighter < ApplicationRecord
     self.save!
   end
 
+  def buy_training_points
+    return false if self.balance < self.training_point_cost
+
+    self.training_points += 1
+    self.ledgers.create!(description: "Purchased training point", amount: -self.training_point_cost)
+    self.save!
+    true
+  end
+
+  def training_point_cost
+    cost =
+      case self.training_points
+      when 0..5
+        50000
+      when 6..10
+        500000
+      when 11..15
+        1000000
+      when 16..25
+        10000000
+      when 25..30
+        50000000
+      else
+        500000000000000000
+      end
+  end
+
   def set_weight_class
     self.weight_class ||= WeightClass.find_highest_class_for_weight(self.weight)
   end
+
   def reset_endurance
     self.endurance = self.base_endurance
   end
@@ -117,18 +145,22 @@ class Fighter < ApplicationRecord
   def self.roll_weight
     if rand() <= 0.99 # 99% chance
       rand(90..225)
-    else # 1% chance
+    else
+      # 1% chance
       rand(226..350)
     end
   end
+
   def self.roll_ability
-    dice = Array.new(4) { rand(1..6) }  # Roll four dice and store their results
+    dice = Array.new(4) { rand(1..6) } # Roll four dice and store their results
     ability_score = dice.sort.last(3).sum
     ability_score
   end
+
   def self.roll_base_endurance
     rand(10..100)
   end
+
   def wins
     won_matches.count
   end
@@ -147,6 +179,7 @@ class Fighter < ApplicationRecord
     # Count matches where the fighter participated, match is completed, and there's no winner
     Match.where("(fighter_1_id = ? OR fighter_2_id = ?) AND winner_id IS NULL AND status_id = 1", self.id, self.id).count
   end
+
   def knockouts
     won_matches.where(result_id: Match.result_ids['ko']).count
   end
@@ -159,6 +192,7 @@ class Fighter < ApplicationRecord
 
     (wins.to_f / total_matches).round(3)
   end
+
   def completed_matches
     (matches_as_fighter_1.or(matches_as_fighter_2)).where(status_id: :completed)
   end
@@ -166,6 +200,7 @@ class Fighter < ApplicationRecord
   def pending_matches
     (matches_as_fighter_1.or(matches_as_fighter_2)).where(status_id: :pending)
   end
+
   def titles_list
     titles.map(&:name).join(', ')
   end
@@ -182,14 +217,18 @@ class Fighter < ApplicationRecord
     current_titles.exists?
   end
 
-
   def total_winnings
     self.ledgers.where("amount > 0").sum(:amount)
+  end
+
+  def balance
+    ledgers.sum(:amount) || 0
   end
 
   def past_champion?
     titles.where.not(lost_at: nil).exists?
   end
+
   def rank
     self.weight_class.weight_class_ranks.find_by(fighter_id: self.id)&.rank_number
   end
@@ -207,7 +246,7 @@ class Fighter < ApplicationRecord
     potential_opponents = potential_opponents.where.not(id: pending_match_fighter_ids)
 
     # Calculate the rank difference for each fighter and order by it
-    potential_opponents  = potential_opponents.sort_by do |fighter|
+    potential_opponents = potential_opponents.sort_by do |fighter|
       (fighter.rank - self.rank).abs
     end
 
