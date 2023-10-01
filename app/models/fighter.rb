@@ -136,8 +136,8 @@ class Fighter < ApplicationRecord
   end
 
   def train
-    if (rand(1..100) + training_points) >= 90
-      level_points += 1
+    if (rand(1..100) + self.training_points) >= 90
+      self.level_points += 1
       save!
     end
   end
