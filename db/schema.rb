@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_17_185131) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_01_200005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,6 +31,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_185131) do
     t.integer "previous_rank"
     t.integer "highest_rank"
     t.integer "endurance_round"
+    t.integer "training_points"
+    t.integer "level_points"
     t.index ["weight_class_id"], name: "index_fighters_on_weight_class_id"
   end
 
