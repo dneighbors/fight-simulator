@@ -8,7 +8,8 @@ class Fighter < ApplicationRecord
   has_many :weight_class_ranks
   has_many :ledgers
 
-
+  attribute :training_points, default: -> { 0 }
+  attribute :level_points, default: -> { 0 }
   attribute :name, default: -> { random_name }
   attribute :nickname, default: -> { random_nickname }
   attribute :birthplace, default: -> { random_birthplace }

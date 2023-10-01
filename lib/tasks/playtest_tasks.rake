@@ -241,6 +241,17 @@ namespace :playtest do
     end
   end
 
+  namespace :update do
+    desc "Update all missing fighter points (training and level) to 0"
+    task points: :environment do
+      Fighter.all.each do |fighter|
+        fighter.level_points ||= 0
+        fighter.training_points ||= 0
+        fighter.save!
+      end
+    end
+  end
+
   namespace :play do
     desc "Play through ALL possible combinations of unplayed match ups by weight class"
     task all_combinations: :environment do
