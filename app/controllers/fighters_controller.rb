@@ -7,6 +7,10 @@ class FightersController < ApplicationController
       @fighters = Fighter.where(id: Title.where(lost_at: nil).select(:fighter_id)).order(:weight_class_id, :name)
     elsif params[:top_money] == 'true'
       @fighters = Fighter.all.sort_by { |fighter| -fighter.total_winnings }.take(10)
+    elsif params[:unspent_level_points] == 'true'
+      @fighters = Fighter.where('level_points > 0').order(:weight_class_id, :name)
+    elsif params[:top_training_points] == 'true'
+      @fighters = Fighter.all.order(:training_points).limit(25)
     else
       @fighters = Fighter.order(:weight_class_id, :name)
     end

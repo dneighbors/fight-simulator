@@ -12,7 +12,7 @@
   <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
 
     <p style="color: green"><%= notice %></p>
-    <p class="mb-5"><%= link_to "All", fighters_path, class: "text-blue-500 hover:underline" %> | <%= link_to "Current Champs", fighters_path(current_champs: true), class: "text-blue-500 hover:underline" %>  | <%= link_to "Top Money", fighters_path(top_money: true), class: "text-blue-500 hover:underline" %> </p>
+    <p class="mb-5"><%= link_to "All", fighters_path, class: "text-blue-500 hover:underline" %> | <%= link_to "Current Champs", fighters_path(current_champs: true), class: "text-blue-500 hover:underline" %>  | <%= link_to "Top Money", fighters_path(top_money: true), class: "text-blue-500 hover:underline" %> | <%= link_to "Most Training Points", fighters_path(top_training_points: true), class: "text-blue-500 hover:underline" %> | <%= link_to "Unspent Level Points", fighters_path(unspent_level_points: true), class: "text-blue-500 hover:underline" %></p>
 
     <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 
