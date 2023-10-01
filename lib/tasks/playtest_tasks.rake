@@ -218,6 +218,7 @@ namespace :playtest do
         if num_fighters_to_create > 0
           puts "  Creating Fighters for #{weight_class.name}"
           num_fighters_to_create.times do
+            weight = 201 + rand(1..100) if weight_class.name == "Heavyweight"
             fighter = Fighter.create!(weight: weight)
             puts "     Created fighter #{fighter.name} : #{fighter.weight_class.name} #{fighter.weight}"
           end
