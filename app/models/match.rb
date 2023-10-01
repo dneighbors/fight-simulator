@@ -430,6 +430,8 @@ class Match < ApplicationRecord
   def training
     self.fighter_1.update_endurance if self.fighter_1.endurance < 15
     self.fighter_2.update_endurance if self.fighter_2.endurance < 15
+    self.fighter_1.train
+    self.fighter_2.train
   end
 
   def self.reset_all_matches

@@ -107,6 +107,13 @@ class Fighter < ApplicationRecord
     self.endurance = self.base_endurance
   end
 
+  def train
+    if (rand(1..100) + training_points) >= 90
+      level_points += 1
+      save!
+    end
+  end
+
   def self.roll_weight
     if rand() <= 0.99 # 99% chance
       rand(90..225)
