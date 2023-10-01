@@ -28,14 +28,17 @@
             <table class="min-w-full divide-y divide-gray-300">
               <thead>
               <tr>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Current Rank</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Curr Rank</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Prev Rank</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Highest Rank</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">High Rank</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Lifetime Earnings</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Current Balance</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Current Title(s)</th>
                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Fighter</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Record</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Winning Pct</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Win Pct</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Lvl Pts</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Trn Pts</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Last Opponent</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Next Match</th>
               </tr>
@@ -51,9 +54,10 @@
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.previous_rank %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.highest_rank %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_to_currency(fighter.total_winnings, precision: 0) %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_to_currency(fighter.balance, precision: 0) %></td>
                 <% if fighter.current_champion? %>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 relative group">
-                      <%= fighter.current_titles_list %>
+                      <%= fighter.abbreviated_curent_titles_list %>
                   </td>
                 <% else %>
                   <td>&nbsp;</td>
@@ -62,6 +66,8 @@
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"><%= link_to fighter.name, fighter_url(fighter), class: "text-blue-500 hover:underline" %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.wins %> - <%= fighter.losses %> - <%= fighter.draws %> (<%= fighter.knockouts %> KOs)</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.level_points %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.training_points %></td>
                 <% if last_opponent.nil? %>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">No Fights</td>
                 <% else %>

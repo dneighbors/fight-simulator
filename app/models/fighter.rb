@@ -209,6 +209,10 @@ class Fighter < ApplicationRecord
     current_titles.map(&:name).join(', ')
   end
 
+  def abbreviated_curent_titles_list
+    current_titles.map { |title| title.name.split.map(&:first).join }.join(', ')
+  end
+
   def current_titles
     titles.where(lost_at: nil)
   end
