@@ -34,6 +34,8 @@ namespace :playtest do
           match.punch(match.fighter_1, match.fighter_2, new_round, 1)
           match.punch(match.fighter_2, match.fighter_1, new_round, 2)
           puts "Round Score: #{match.fighter_1.name} : #{new_round.fighter_1_points} - #{match.fighter_2.name} : #{new_round.fighter_2_points}"
+          match.fighter_recovery(round)
+          puts "Round Recovery: #{match.fighter_1.name} : #{match.fighter_1.endurance}/#{match.fighter_1.base_endurance} - #{match.fighter_2.name} : #{match.fighter_2.endurance}/#{match.fighter_2.base_endurance}"
         end
       end
       match.score_match
@@ -209,7 +211,7 @@ namespace :playtest do
     task fighters: :environment do
       WeightClass.all.each do |weight_class|
         puts "Number of fighters in #{weight_class.name}: #{weight_class.fighters.count}"
-        desired_num_fighters = 12
+        desired_num_fighters = 10
         num_fighters_to_create = desired_num_fighters - weight_class.fighters.count
         weight = weight_class.max_weight - 2
 

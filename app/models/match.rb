@@ -120,6 +120,10 @@ class Match < ApplicationRecord
     rand(1..20)
   end
 
+  def fighter_recovery(round)
+    fighter_1.round_recovery(round)
+    fighter_2.round_recovery(round)
+  end
   def punch_roll(offensive_fighter, offensive_penalty)
     roll = Match.roll_d20
     adjusted_punch = offensive_fighter.punch + offensive_penalty
@@ -424,8 +428,8 @@ class Match < ApplicationRecord
   end
 
   def training
-    self.fighter_1.update_endurance
-    self.fighter_2.update_endurance
+    self.fighter_1.update_endurance if self.fighter_1.endurance < 15
+    self.fighter_2.update_endurance if self.fighter_2.endurance < 15
   end
 
   def self.reset_all_matches

@@ -72,6 +72,33 @@ class Fighter < ApplicationRecord
       end
   end
 
+  def round_recovery(round)
+    return if round > self.endurance_round
+    recovery =
+      case self.base_endurance
+      when 51..75
+        rand(1..4)
+      when 76..100
+        rand(1..6)
+      when 101.170
+        rand(1..8)
+      when 171..200
+        rand(1..10)
+      when 201.300
+        rand(1..12)
+      when 301..400
+        rand(1..12) + 1
+      when 401..500
+        rand(1..12) + 2
+      when 501..600
+        rand(1..12) + 3
+      else
+        0
+      end
+    self.endurance = [self.endurance + recovery, self.base_endurance].min
+    self.save!
+  end
+
   def set_weight_class
     self.weight_class ||= WeightClass.find_highest_class_for_weight(self.weight)
   end

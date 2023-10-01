@@ -14,24 +14,31 @@
     <% rounds = @match.max_rounds || 4 %>
     <% (1..rounds).each do |round| %>
       <% if @match.winner_id.nil? %>
-      <% new_round = @match.rounds.build(round_number: round) %>
-      <h2 class="text-lg font-medium leading-5 text-gray-800 py-2">Round <%= round %></h2>
+        <% new_round = @match.rounds.build(round_number: round) %>
+        <h2 class="text-lg font-medium leading-5 text-gray-800 py-2">Round <%= round %></h2>
 
-      <div class="flex items-center py-2">
-        <%= image_tag("sample_boxer.gif", class: "w-10 h-10 rounded-full", alt: @match.fighter_1.name) %>
-        <span class="ml-4 text-gray-700">
+        <div class="flex items-center py-2">
+          <%= image_tag("sample_boxer.gif", class: "w-10 h-10 rounded-full", alt: @match.fighter_1.name) %>
+          <span class="ml-4 text-gray-700">
           <%= "#{@match.fighter_1.name} #{@match.punch(@match.fighter_1, @match.fighter_2, new_round, 1)}" %>
         </span>
-      </div>
+        </div>
 
-      <div class="flex items-center py-2">
-        <%= image_tag("sample_boxer.gif", class: "w-10 h-10 rounded-full", alt: @match.fighter_2.name) %>
-        <span class="ml-4 text-gray-700">
+        <div class="flex items-center py-2">
+          <%= image_tag("sample_boxer.gif", class: "w-10 h-10 rounded-full", alt: @match.fighter_2.name) %>
+          <span class="ml-4 text-gray-700">
           <%= "#{@match.fighter_2.name} #{@match.punch(@match.fighter_2, @match.fighter_1, new_round, 2)}" %>
         </span>
-      </div>
-        <div class="mb-5">Round Score: <%= "#{@match.fighter_1.name} : #{new_round.fighter_1_points} - #{@match.fighter_2.name} : #{new_round.fighter_2_points}" %></div>
-        <% end %>
+        </div>
+        <div class="mb-5">
+          Round Score: <%= "#{@match.fighter_1.name} : #{new_round.fighter_1_points} - #{@match.fighter_2.name} : #{new_round.fighter_2_points}" %>
+        </div>
+        <% @match.fighter_recovery(round) %>
+        <div class="mb-5">
+          Round Recovery: <%= "#{@match.fighter_1.name} : #{@match.fighter_1.endurance}/#{@match.fighter_1.base_endurance} - #{@match.fighter_2.name} : #{@match.fighter_2.endurance}/#{@match.fighter_2.base_endurance}" %>
+        </div>
+
+  <% end %>
     <% end %>
     <% @match.score_match %>
     <% @match.training %>
@@ -41,14 +48,16 @@
       <div>Match is a draw!</div>
     <% else %>
       <div>
-        <%= link_to @match.winner&.name, fighter_path(@match.winner), class: "text-blue-500 hover:underline" %> winner by <%= @match.result_id.upcase %> in the <%= @match.rounds.count.ordinalize %> round!
+        <%= link_to @match.winner&.name, fighter_path(@match.winner), class: "text-blue-500 hover:underline" %> winner
+        by <%= @match.result_id.upcase %> in the <%= @match.rounds.count.ordinalize %> round!
       </div>
     <% end %>
-      <% if @match.result_id == 'decision' %>
+    <% if @match.result_id == 'decision' %>
       <div>
-        <%= link_to(@match.fighter_1.name, fighter_path(@match.fighter_1), class: "text-blue-500 hover:underline") %> <%= @match.fighter_1_final_score %> - <%= link_to @match.fighter_2.name, fighter_path(@match.fighter_2), class: "text-blue-500 hover:underline" %> <%= @match.fighter_2_final_score %>
+        <%= link_to(@match.fighter_1.name, fighter_path(@match.fighter_1), class: "text-blue-500 hover:underline") %> <%= @match.fighter_1_final_score %>
+        - <%= link_to @match.fighter_2.name, fighter_path(@match.fighter_2), class: "text-blue-500 hover:underline" %> <%= @match.fighter_2_final_score %>
       </div>
-      <% end %>
+    <% end %>
     <div class="mt-5"><%= link_to("View #{@match.weight_class.name} rankings.", weight_class_path(@match.weight_class), class: "text-blue-500 hover:underline") %></div>
-    </div>
+  </div>
 </main>
