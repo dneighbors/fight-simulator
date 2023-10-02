@@ -21,8 +21,8 @@ class Fighter < ApplicationRecord
   attribute :base_endurance, default: -> { roll_base_endurance }
 
   after_initialize :set_endurance
-  after_initialize :set_endurance_round
   after_initialize :set_weight_class
+  after_create :set_endurance_round
   after_create :set_rankings
 
   def self.random_name
@@ -46,7 +46,7 @@ class Fighter < ApplicationRecord
   end
 
   def set_endurance_round
-    self.endurance_round ||=
+    recovery_round =
       case self.base_endurance
       when 0..25
         rand(1..4)
@@ -56,7 +56,7 @@ class Fighter < ApplicationRecord
         rand(1..8)
       when 76..100
         rand(1..10)
-      when 101.170
+      when 101..170
         rand(1..12)
       when 171..200
         rand(1..12) + 3
@@ -71,6 +71,7 @@ class Fighter < ApplicationRecord
       else
         15
       end
+    self.endurance_round = [recovery_round, self.endurance_round].max
   end
 
   def round_recovery(round)
@@ -212,6 +213,7 @@ class Fighter < ApplicationRecord
   def increase_endurance
     self.base_endurance += rand(1..20)
     self.endurance = self.base_endurance
+    set_endurance_round
   end
   def abbreviated_curent_titles_list
     current_titles.map { |title| title.name.split.map(&:first).join }.join(', ')
