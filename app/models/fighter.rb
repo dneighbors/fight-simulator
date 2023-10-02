@@ -209,6 +209,10 @@ class Fighter < ApplicationRecord
     current_titles.map(&:name).join(', ')
   end
 
+  def increase_endurance
+    self.base_endurance += rand(1..20)
+    self.endurance = self.base_endurance
+  end
   def abbreviated_curent_titles_list
     current_titles.map { |title| title.name.split.map(&:first).join }.join(', ')
   end

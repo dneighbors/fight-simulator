@@ -1,7 +1,7 @@
 <li class="col-span-1 md:col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
   <div class="flex flex-1 flex-col p-8">
     <%= image_tag("sample_boxer.gif", class: "mx-auto h-32 w-32 flex-shrink-0 rounded-full", alt: fighter.name) %>
-    <h2 class="mt-6 text-xl font-bold text-gray-900"><%= fighter.name %></h2>
+    <h2 class="mt-6 text-xl font-bold text-gray-900"><%= link_to fighter.name, fighter_path(fighter) %></h2>
     <h3 class="text-sm text-gray-500"><%= fighter.nickname %></h3>
 
     <% if fighter.current_champion? %>

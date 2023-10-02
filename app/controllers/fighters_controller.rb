@@ -49,6 +49,7 @@ class FightersController < ApplicationController
 
   # PATCH/PUT /fighters/1 or /fighters/1.json
   def update
+
     if params[:fighter][:buy_training_points] == "true"
       if @fighter.buy_training_points
         flash[:notice] = "Training points purchased!"
@@ -58,9 +59,18 @@ class FightersController < ApplicationController
       redirect_to @fighter and return
     end
 
+    if params[:spend_points] == "true"
+      if @fighter.level_points < 1
+        flash[:notice] = "Insufficient level points to spend."
+        redirect_to @fighter and return
+      end
+      @fighter.level_points -= 1
+      @fighter.increase_endurance if params[:endurance]
+    end
+
     respond_to do |format|
       if @fighter.update(fighter_params)
-        format.html { redirect_to fighters_url, notice: "Fighter was successfully updated." }
+        format.html { redirect_to fighter_url(@fighter), notice: "Fighter was successfully updated." }
         format.json { render :show, status: :ok, location: @fighter }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -88,6 +98,6 @@ class FightersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def fighter_params
-    params.require(:fighter).permit(:name, :nickname, :birthplace, :punch, :strength, :speed, :dexterity, :base_endurance, :endurance, :weight, :weight_class_id, :buy_training_points)
+    params.require(:fighter).permit(:name, :nickname, :birthplace, :punch, :strength, :speed, :dexterity, :base_endurance, :endurance, :endurance_round, :weight, :weight_class_id, :buy_training_points)
   end
 end
