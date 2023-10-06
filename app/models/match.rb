@@ -52,7 +52,7 @@ class Match < ApplicationRecord
         split_factor = (rank_difference + 1) * 0.065  # Adjust this factor as needed
 
         # Ensure the split factor is within the range [0, 0.5]
-        split_factor = [split_factor, 0.5].min
+        split_factor = [split_factor, 0.45].min
         split_factor = [split_factor, 0.0].max
 
         # Assign splits based on fighter ranks

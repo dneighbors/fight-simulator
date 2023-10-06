@@ -22,7 +22,7 @@ class Fighter < ApplicationRecord
 
   after_initialize :set_endurance
   after_initialize :set_weight_class
-  after_create :set_endurance_round
+  before_create :set_endurance_round
   after_create :set_rankings
 
   def self.random_name
@@ -71,7 +71,11 @@ class Fighter < ApplicationRecord
       else
         15
       end
-    self.endurance_round = [recovery_round, self.endurance_round].max
+    if !self.endurance_round.nil?
+      self.endurance_round = [recovery_round, self.endurance_round].max
+    else
+      self.endurance_round = recovery_round
+    end
   end
 
   def round_recovery(round)
