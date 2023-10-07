@@ -4,9 +4,9 @@ class MatchesController < ApplicationController
   # GET /matches or /matches.json
   def index
     if params[:status] == "completed"
-      @matches = Match.where(status_id: :completed)
+      @matches = Match.where(status_id: :completed).order(:match_purse)
     else
-      @matches = Match.where(status_id: :pending)
+      @matches = Match.where(status_id: :pending).order(:match_purse)
     end
   end
 
