@@ -11,6 +11,8 @@ class FightersController < ApplicationController
       @fighters = Fighter.where('level_points > 0').order(level_points: :desc).limit(25)
     elsif params[:top_training_points] == 'true'
       @fighters = Fighter.where('training_points > 0').order(training_points: :desc).limit(25)
+    elsif params[:needs_training] == 'true'
+      @fighters = Fighter.joins(:ledgers).group('fighters.id').having('SUM(ledgers.amount) > 50000').limit(25)
     else
       @fighters = Fighter.order(:weight_class_id, :name)
     end
