@@ -132,6 +132,14 @@ class Fighter < ApplicationRecord
       end
   end
 
+  def self.needs_training
+    fighters = Fighter.includes(:ledgers)
+    fighters.select do |fighter|
+      balance = fighter.ledgers.sum(:amount)
+      balance >= fighter.training_point_cost
+    end
+  end
+
   def set_weight_class
     self.weight_class ||= WeightClass.find_highest_class_for_weight(self.weight)
   end
