@@ -116,7 +116,7 @@ class Fighter < ApplicationRecord
 
   def training_point_cost
     cost =
-      case self.training_points
+      case self.training_points + 1
       when 0..5
         50000
       when 6..10
