@@ -106,7 +106,7 @@ class Fighter < ApplicationRecord
   end
 
   def buy_training_points
-    return false if self.balance < self.training_point_cost
+    return false if self.balance < self.training_point_cost(next: true
 
     self.training_points += 1
     self.ledgers.create!(description: "Purchased training point", amount: -self.training_point_cost)
@@ -114,9 +114,10 @@ class Fighter < ApplicationRecord
     true
   end
 
-  def training_point_cost
+  def training_point_cost(next: false)
+    points = next ? self.training_points + 1 : self.training_points
     cost =
-      case self.training_points + 1
+      case points
       when 0..5
         50000
       when 6..10
@@ -191,6 +192,34 @@ class Fighter < ApplicationRecord
   def draws
     # Count matches where the fighter participated, match is completed, and there's no winner
     Match.where("(fighter_1_id = ? OR fighter_2_id = ?) AND winner_id IS NULL AND status_id = 1", self.id, self.id).count
+  end
+
+
+  def win_or_loss_streak
+    streak = 0
+    last_result = nil
+    matches = matches_as_fighter_1.where(status_id: 1)
+                                  .or(matches_as_fighter_2.where(status_id: 1))
+                                  .order(created_at: :desc)
+
+    matches.each do |match|
+      current_result = if match.winner_id == self.id
+                         'W'
+                       else
+                         'L'
+                       end
+
+      if last_result.nil?
+        last_result = current_result
+        streak = 1
+      elsif last_result == current_result
+        streak += 1
+      else
+        break
+      end
+    end
+
+    "#{last_result}#{streak}"
   end
 
   def knockouts

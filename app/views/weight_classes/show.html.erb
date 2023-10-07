@@ -31,6 +31,7 @@
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Curr Rank</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Prev Rank</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">High Rank</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Streak</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Lifetime Earnings</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Current Balance</th>
                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Current Title(s)</th>
@@ -53,6 +54,7 @@
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.rank %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.previous_rank %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.highest_rank %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= fighter.win_or_loss_streak %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_to_currency(fighter.total_winnings, precision: 0) %></td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_to_currency(fighter.balance, precision: 0) %></td>
                 <% if fighter.current_champion? %>

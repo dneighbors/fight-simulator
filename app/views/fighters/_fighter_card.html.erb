@@ -16,7 +16,7 @@
     <h4 class="text-sm font-bold text-gray-900"><%= fighter.wins %> - <%= fighter.losses %> - <%= fighter.draws %>
       (<%= fighter.knockouts %> KOs)</h4>
     <p class="mt-1 text-xs text-gray-300 italic">Winning
-      Pct <%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></p>
+      Pct <%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %> (<%= fighter.win_or_loss_streak %>)</p>
     <dl class="mt-1 flex flex-col">
       <dd class="text-sm text-gray-500"><%= fighter.nickname %></dd>
       <%= link_to weight_class_path(fighter.weight_class) do %>
