@@ -137,7 +137,7 @@ class Fighter < ApplicationRecord
     fighters = Fighter.includes(:ledgers)
     fighters.select do |fighter|
       balance = fighter.ledgers.sum(:amount)
-      balance >= fighter.training_point_cost
+      balance >= fighter.training_point_cost(future: true)
     end
   end
 
