@@ -106,7 +106,7 @@ class Fighter < ApplicationRecord
   end
 
   def buy_training_points
-    return false if self.balance < self.training_point_cost(next: true
+    return false if self.balance < self.training_point_cost(future: true)
 
     self.training_points += 1
     self.ledgers.create!(description: "Purchased training point", amount: -self.training_point_cost)
@@ -114,8 +114,8 @@ class Fighter < ApplicationRecord
     true
   end
 
-  def training_point_cost(next: false)
-    points = next ? self.training_points + 1 : self.training_points
+  def training_point_cost(future: false)
+    points = future ? self.training_points + 1 : self.training_points
     cost =
       case points
       when 0..5
