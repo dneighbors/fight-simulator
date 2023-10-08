@@ -19,9 +19,10 @@
         <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
           <div class="flex flex-1 flex-col p-8">
 
-            <h2 class="mt-1 text-2xl font-bold text-gray-900"><%= weight_class.name %></h2>
+            <h2 class="mt-1 text-xl font-bold text-gray-900"><%= weight_class.name %></h2>
             <p class="mt-2 text-lg font-semibold text-gray-900"><%= weight_class.fighters.count %> Fighters</p>
             <h3 class="mt-1 text-sm text-gray-800">Max Weight (<%= weight_class.max_weight %>lbs)</h3>
+            <p class="mt-1 text-sm text-gray-800"><%= weight_class.matches.count %> Matches</p>
 
             <div class="-mt-px flex divide-x divide-gray-200">
               <div class="flex w-0 flex-1">
