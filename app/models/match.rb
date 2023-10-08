@@ -272,7 +272,7 @@ class Match < ApplicationRecord
         true
       end
     when 18..30
-      if ((damage > 10) && (rand(1..100) < 40)) || ((defensive_fighter.endurance < 20) || (rand(1..100) < 50 ))
+      if ((damage > 10) && (rand(1..100) < 40)) || ((defensive_fighter.endurance < 20) && (rand(1..100) < 50 ))
         true
       else
         false
