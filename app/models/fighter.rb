@@ -109,7 +109,7 @@ class Fighter < ApplicationRecord
     return false if self.balance < self.training_point_cost(future: true)
 
     self.training_points += 1
-    self.ledgers.create!(description: "Purchased training point", amount: -self.training_point_cost)
+    self.ledgers.create!(description: "Purchased training point", amount: -self.training_point_cost, transaction_date: Date.today)
     self.save!
     true
   end
