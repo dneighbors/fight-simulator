@@ -20,9 +20,9 @@ class MatchesController < ApplicationController
     @match.fighter_1 = Fighter.find(params[:fighter_1_id]) if params[:fighter_1_id].present?
     @match.fighter_2 = Fighter.find(params[:fighter_2_id]) if params[:fighter_2_id].present?
     if params[:weight_class_id].present?
-      @fighters = Fighter.where(weight_class_id: params[:weight_class_id])
+      @fighters = Fighter.where(weight_class_id: params[:weight_class_id]).order(:name)
     else
-      @fighters = Fighter.all
+      @fighters = Fighter.all.order(:name)
     end
     @weight_classes = WeightClass.all
   end
@@ -35,7 +35,7 @@ class MatchesController < ApplicationController
   # GET /matches/1/edit
   def edit
     @match = Match.find(params[:id])
-    @fighters = Fighter.all
+    @fighters = Fighter.all.order(:name)
     @weight_classes = WeightClass.all
   end
 
