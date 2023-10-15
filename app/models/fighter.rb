@@ -236,7 +236,7 @@ class Fighter < ApplicationRecord
   end
 
   def completed_matches
-    (matches_as_fighter_1.or(matches_as_fighter_2)).where(status_id: :completed)
+    (matches_as_fighter_1.or(matches_as_fighter_2)).where(status_id: :completed).order('matches.created_at ASC')
   end
 
   def pending_matches
