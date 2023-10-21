@@ -223,18 +223,19 @@ class Match < ApplicationRecord
       end
     when 19..30
       reduce_health(defensive_fighter, damage)
-      score_round(round, fighter_number, damage)
 
       # Check for Technical Knockout
       if fighter_number == 1
         round.fighter_1_knockdowns = 1
         if rounds.sum(:fighter_1_knockdowns) >= 3
+          score_round(round, fighter_number, damage)
           end_match(offensive_fighter, defensive_fighter, damage, false)
           return
         end
       elsif fighter_number == 2
         round.fighter_2_knockdowns = 1
         if rounds.sum(:fighter_2_knockdowns) >= 3
+          score_round(round, fighter_number, damage)
           end_match(offensive_fighter, defensive_fighter, damage, false)
           return
         end
@@ -242,6 +243,7 @@ class Match < ApplicationRecord
 
       # Check for Knockout
       knockout = determine_knockout(defensive_fighter, damage, defensive_penalty)
+      score_round(round, fighter_number, damage)
       if knockout
         end_match(offensive_fighter, defensive_fighter, damage)
       else
