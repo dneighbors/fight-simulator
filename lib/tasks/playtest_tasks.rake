@@ -211,7 +211,7 @@ namespace :playtest do
     task fighters: :environment do
       WeightClass.all.each do |weight_class|
         puts "Number of fighters in #{weight_class.name}: #{weight_class.fighters.count}"
-        desired_num_fighters = 10
+        desired_num_fighters = 18
         num_fighters_to_create = desired_num_fighters - weight_class.fighters.count
         weight = weight_class.max_weight - 2
 
