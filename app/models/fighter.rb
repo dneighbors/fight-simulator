@@ -321,4 +321,41 @@ class Fighter < ApplicationRecord
       fighter.save
     end
   end
+
+  def power_score
+    scores = {
+      punch: score(punch, [[3,6], [7,10], [11,14], [15,17], [18,20], [21, 25]], 20),
+      strength: score(strength, [[3,6], [7,10], [11,14], [15,17], [18,20], [21, 25]], 10),
+      base_endurance: score(base_endurance, [[0,25], [26,50], [51,75], [76,100], [101,200], [201, 300]]),
+      speed: score(speed, [[3,13], [14,17], [18,20], [21, 25]], 30),
+      dexterity: score(dexterity, [[3,6], [7,10], [11,14], [15,17], [18,20], [21,25]], 10),
+      # previous_rank: score(previous_rank, [[1,3], [4,6], [7,10], [11,15], [16,20], [21,30], [31,40], [41,50], [51,60], [61,100]], 0, true),
+      highest_rank: score(highest_rank, [[1,3], [4,6], [7,10], [11,15], [16,20], [21,30], [31,40], [41,50], [51,60], [61,100]],0, true),
+      endurance_round: score(endurance_round, [[1,2], [3,4], [5,6], [7,8], [9,10], [11,12], [13, 15]])
+    }
+
+    total_score = scores.values.sum
+    normalized_score = [(total_score / scores.keys.size).round, 100].min
+  end
+
+  private
+  def score(value, ranges, boost=0, is_rank=false)
+    if is_rank
+      # For rank attributes: Lower rank values get higher scores
+      ranges.reverse_each.with_index do |range, index|
+        if value.between?(range.first, range.last)
+          # As we're iterating in reverse, (ranges.length - index) gives us the position from the start.
+          # Multiply it by a factor (e.g., 20) to distribute scores across the range.
+          return (ranges.length - index) * 20
+        end
+      end
+    else
+      ranges.each_with_index do |range, index|
+        mid_score = (range.first + range.last) / 2.0
+        mid_score += boost if value >= 18
+        return mid_score if value.between?(range.first, range.last)
+      end
+    end
+    0  # Default return value if none of the ranges match
+  end
 end
