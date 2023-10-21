@@ -223,8 +223,21 @@ class Match < ApplicationRecord
       end
     when 19..30
       reduce_health(defensive_fighter, damage)
-      round.fighter_1_knockdowns += 1 if fighter_number == 1
-      round.fighter_2_knockdowns += 1 if fighter_number == 2
+
+      # Check for Technical Knockout
+      if fighter_number == 1
+        round.fighter_1_knockdowns += 1
+        if round.fighter_1_knockdowns >= 3
+          end_match(offensive_fighter, defensive_fighter, damage, false)
+        end
+      elsif fighter_number == 2
+        round.fighter_2_knockdowns += 1
+        if round.fighter_2_knockdowns >= 3
+          end_match(offensive_fighter, defensive_fighter, damage, false)
+        end
+      end
+
+      # Check for Knockout
       knockout = determine_knockout(defensive_fighter, damage, defensive_penalty)
       score_round(round, fighter_number, damage)
       if knockout
@@ -237,10 +250,15 @@ class Match < ApplicationRecord
     end
   end
 
-  def end_match(offensive_fighter, defensive_fighter, damage)
+  def end_match(offensive_fighter, defensive_fighter, damage, knockout = true)
     self.winner = offensive_fighter
-    self.ko!
-    "HAS KNOCKED OUT #{defensive_fighter.name} inflicting #{damage} damage."
+    if knockout
+      self.ko!
+      "HAS KNOCKED OUT #{defensive_fighter.name} inflicting #{damage} damage."
+    else
+      self.tko!
+      "HAS TECHNICALLY KNOCKED OUT #{defensive_fighter.name} inflicting #{damage} damage."
+    end
   end
 
   def score_round(round, fighter_number, damage)
