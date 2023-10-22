@@ -24,6 +24,7 @@ class WeightClass < ApplicationRecord
     winning_percentage_weight = 100
     number_of_fights_weight = 1
     highest_rank_weight = 0.5
+    power_score_weight = 1
 
 
     # Calculate a composite score for each fighter
@@ -42,13 +43,16 @@ class WeightClass < ApplicationRecord
       number_of_fights = (fighter.matches_as_fighter_1.count + fighter.matches_as_fighter_2.count) * number_of_fights_weight
 
       # Highest previous rank as the third factor (lower is better)
-      highest_rank = fighter.highest_rank #|| Float::INFINITY * highest_rank_weight
+      highest_rank = fighter.highest_rank # * highest_rank_weight
+
+      # Power score as the fourth factor (higher is better)
+      fighter_power = fighter.power_score * power_score_weight
 
       if highest_rank.nil?
       # Calculate the composite score
-        composite_score = (winning_percentage + number_of_fights)
+        composite_score = (winning_percentage + number_of_fights + fighter_power)
       else
-        composite_score = (winning_percentage + number_of_fights) - highest_rank
+        composite_score = (winning_percentage + number_of_fights + fighter_power) - highest_rank
       end
       composite_score = composite_score * 0.5 if number_of_fights < 3
       composite_score = -100000 if number_of_fights == 0
