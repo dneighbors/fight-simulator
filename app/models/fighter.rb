@@ -324,14 +324,14 @@ class Fighter < ApplicationRecord
 
   def power_score
     scores = {
-      punch: score(punch, [[3,6], [7,10], [11,14], [15,17], [18,20], [21, 25]], 20),
-      strength: score(strength, [[3,6], [7,10], [11,14], [15,17], [18,20], [21, 25]], 10),
-      base_endurance: score(base_endurance, [[0,25], [26,50], [51,75], [76,100], [101,200], [201, 300]]),
-      speed: score(speed, [[3,13], [14,17], [18,20], [21, 25]], 30),
-      dexterity: score(dexterity, [[3,6], [7,10], [11,14], [15,17], [18,20], [21,25]], 10),
+      punch: score(punch, [[3,6], [7,10], [11,14], [15,17], [18,20], [21, 25]], 10),
+      strength: score(strength, [[3,6], [7,10], [11,14], [15,17], [18,20], [21, 25]], 5),
+      # base_endurance: score(base_endurance, [[0,25], [26,50], [51,75], [76,100], [101,200], [201, 300]]),
+      speed: score(speed, [[3,13], [14,17], [18,20], [21, 25]], 20),
+      dexterity: score(dexterity, [[3,6], [7,10], [11,14], [15,17], [18,20], [21,25]], 5)
       # previous_rank: score(previous_rank, [[1,3], [4,6], [7,10], [11,15], [16,20], [21,30], [31,40], [41,50], [51,60], [61,100]], 0, true),
-      highest_rank: score(highest_rank, [[1,3], [4,6], [7,10], [11,15], [16,20], [21,30], [31,40], [41,50], [51,60], [61,100]],0, true),
-      endurance_round: score(endurance_round, [[1,2], [3,4], [5,6], [7,8], [9,10], [11,12], [13, 15]])
+      # highest_rank: score(highest_rank, [[1,3], [4,6], [7,10], [11,15], [16,20], [21,30], [31,40], [41,50], [51,60], [61,100]],0, true),
+      # endurance_round: score(endurance_round, [[1,2], [3,4], [5,6], [7,8], [9,10], [11,12], [13, 15]])
     }
 
     total_score = scores.values.sum
@@ -351,7 +351,7 @@ class Fighter < ApplicationRecord
       end
     else
       ranges.each_with_index do |range, index|
-        mid_score = (range.first + range.last) / 2.0
+        mid_score = (range.first + range.last) * 2
         mid_score += boost if value >= 18
         return mid_score if value.between?(range.first, range.last)
       end
