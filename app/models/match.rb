@@ -227,14 +227,14 @@ class Match < ApplicationRecord
       # Check for Technical Knockout
       if fighter_number == 1
         round.fighter_1_knockdowns = 1
-        if rounds.sum(:fighter_1_knockdowns) >= 3
+        if rounds.sum(:fighter_1_knockdowns) >= 2
           score_round(round, fighter_number, damage)
           end_match(offensive_fighter, defensive_fighter, damage, false)
           return
         end
       elsif fighter_number == 2
         round.fighter_2_knockdowns = 1
-        if rounds.sum(:fighter_2_knockdowns) >= 3
+        if rounds.sum(:fighter_2_knockdowns) >= 2
           score_round(round, fighter_number, damage)
           end_match(offensive_fighter, defensive_fighter, damage, false)
           return
