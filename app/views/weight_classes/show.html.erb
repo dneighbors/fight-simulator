@@ -58,10 +58,10 @@
                 <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.highest_rank %></td>
                 <td class="whitespace-nowrap px-1 py-2 text-center text-sm <%= score_color(fighter.power_score) %>"><%= fighter.power_score %></td>
                 <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.win_or_loss_streak %></td>
-                <td class="whitespace-nowrap px-3 py-2 text-right text-sm text-gray-500"><%= number_to_currency(fighter.total_winnings, precision: 0) %></td>
-                <td class="whitespace-nowrap px-3 py-2 text-right text-sm text-gray-500"><%= number_to_currency(fighter.balance, precision: 0) %></td>
+                <td class="whitespace-nowrap px-1 py-2 text-right text-sm text-gray-500"><%= number_to_currency(fighter.total_winnings, precision: 0) %></td>
+                <td class="whitespace-nowrap px-1 py-2 text-right text-sm text-gray-500"><%= number_to_currency(fighter.balance, precision: 0) %></td>
                 <% if fighter.current_champion? %>
-                  <td class="whitespace-nowrap px-3 py-2 text-left text-sm text-gray-500 relative group">
+                  <td class="whitespace-nowrap px-1 py-2 text-left text-sm text-gray-500 relative group">
                       <%= fighter.abbreviated_curent_titles_list %>
                   </td>
                 <% else %>
@@ -70,24 +70,24 @@
 
                 <td class="whitespace-nowrap py-2 pl-4 pr-3 text-left text-sm font-medium text-gray-900 sm:pl-0"><%= link_to fighter.name, fighter_url(fighter), class: "text-blue-500 hover:underline" %></td>
                 <td class="whitespace-nowrap py-2 pl-4 text-center text-sm text-gray-500"><%= fighter.total_matches %></td>
-                <td class="whitespace-nowrap px-3 py-2 text-center text-sm text-gray-500"><%= fighter.wins %> - <%= fighter.losses %> - <%= fighter.draws %> (<%= fighter.knockouts %> KOs)</td>
-                <td class="whitespace-nowrap px-3 py-2 text-center text-sm text-gray-500"><%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></td>
-                <td class="whitespace-nowrap px-3 py-2 text-center text-sm text-gray-500"><%= fighter.level_points %></td>
-                <td class="whitespace-nowrap px-3 py-2 text-center text-sm text-gray-500"><%= fighter.training_points %></td>
+                <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.wins %> - <%= fighter.losses %> - <%= fighter.draws %> (<%= fighter.knockouts %> KOs)</td>
+                <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></td>
+                <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.level_points %></td>
+                <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.training_points %></td>
                 <% if last_opponent.nil? %>
-                  <td class="whitespace-nowrap px-3 py-2 text-left text-sm text-gray-500">No Fights</td>
+                  <td class="whitespace-nowrap px-1 py-2 text-left text-sm text-gray-500">No Fights</td>
                 <% else %>
-                  <td class="whitespace-nowrap px-3 py-2 text-left text-sm text-gray-500"><%= link_to last_opponent&.name, fighter_url(last_opponent), class: "text-blue-500 hover:underline" %></td>
+                  <td class="whitespace-nowrap px-1 py-2 text-left text-sm text-gray-500"><%= link_to last_opponent&.name, fighter_url(last_opponent), class: "text-blue-500 hover:underline" %></td>
                 <% end %>
                 <% if next_opponent.nil? %>
                   <% suggested_opponent = fighter.suggested_opponents.first %>
                   <% if suggested_opponent %>
-                    <td class="whitespace-nowrap px-3 py-2 text-left text-sm text-gray-500"><%= link_to "Schedule #{suggested_opponent.name}", new_match_url(fighter_1_id: fighter.id, fighter_2_id: suggested_opponent.id, weight_class_id: @weight_class.id), class: "text-blue-500 hover:underline" %></td>
+                    <td class="whitespace-nowrap px-1 py-2 text-left text-sm text-gray-500"><%= link_to "Schedule #{suggested_opponent.name}", new_match_url(fighter_1_id: fighter.id, fighter_2_id: suggested_opponent.id, weight_class_id: @weight_class.id), class: "text-blue-500 hover:underline" %></td>
                   <% else %>
-                    <td class="whitespace-nowrap px-3 py-2 text-left text-sm text-gray-500"><%= link_to "Schedule One", new_match_url(fighter_1_id: fighter.id, weight_class_id: @weight_class.id), class: "text-blue-500 hover:underline" %></td>
+                    <td class="whitespace-nowrap px-1 py-2 text-left text-sm text-gray-500"><%= link_to "Schedule One", new_match_url(fighter_1_id: fighter.id, weight_class_id: @weight_class.id), class: "text-blue-500 hover:underline" %></td>
                   <% end %>
                 <% else %>
-                  <td class="whitespace-nowrap px-3 py-2 text-left text-sm text-gray-500"><%= link_to next_opponent&.name, fighter_url(next_opponent), class: "text-blue-500 hover:underline" %></td>
+                  <td class="whitespace-nowrap px-1 py-2 text-left text-sm text-gray-500"><%= link_to next_opponent&.name, fighter_url(next_opponent), class: "text-blue-500 hover:underline" %></td>
                 <% end %>
               </tr>
               <% end %>

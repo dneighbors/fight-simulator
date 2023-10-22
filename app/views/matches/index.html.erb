@@ -23,8 +23,10 @@
         <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
           <div class="flex flex-1 flex-col p-8">
             <h2 class="mt-6 text-sm font-bold text-gray-900"><%= "#{match.fighter_1.name} (#{match.fighter_1&.rank})" %></h2>
+            <h3 class="mt-1 text-sm text-gray-900"><%= "Rating: #{match.fighter_1&.power_score}" %></h3>
             <p>vs</p>
-            <h2 class="text-sm font-bold text-gray-900"><%= "#{match.fighter_2.name} (#{match.fighter_2&.rank})" %></h2>
+            <h2 class="mt-1 text-sm font-bold text-gray-900"><%= "#{match.fighter_2.name} (#{match.fighter_2&.rank})" %></h2>
+            <h3 class="mt-1 text-sm text-gray-900"><%= "Rating: #{match.fighter_2&.power_score}" %></h3>
             <h3 class="mt-1 text-sm text-gray-900"><%= number_to_currency(match.match_purse, precision: 0) %></h3>
             <% unless match.fighter_1_split.nil? || match.fighter_2_split.nil? %>
               <h3 class="mt-1 text-sm text-gray-900"><%= "#{(match.fighter_1_split * 100).round}% : #{(match.fighter_2_split * 100).round}%" %></h3>
