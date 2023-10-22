@@ -56,7 +56,7 @@
                 <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.rank %></td>
                 <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.previous_rank %></td>
                 <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.highest_rank %></td>
-                <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.power_score %></td>
+                <td class="whitespace-nowrap px-1 py-2 text-center text-sm <%= score_color(fighter.power_score) %>"><%= fighter.power_score %></td>
                 <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.win_or_loss_streak %></td>
                 <td class="whitespace-nowrap px-3 py-2 text-right text-sm text-gray-500"><%= number_to_currency(fighter.total_winnings, precision: 0) %></td>
                 <td class="whitespace-nowrap px-3 py-2 text-right text-sm text-gray-500"><%= number_to_currency(fighter.balance, precision: 0) %></td>
