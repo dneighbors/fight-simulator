@@ -431,7 +431,7 @@ class Match < ApplicationRecord
       end
     end
 
-    self.decision! unless self.ko?
+    self.decision! unless self.ko? || self.tko?
 
     self.completed!
     self.payout

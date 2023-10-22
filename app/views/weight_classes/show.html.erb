@@ -37,9 +37,9 @@
                 <th scope="col" class="px-1 py-3.5 text-center text-sm font-semibold text-gray-900">Current Balance</th>
                 <th scope="col" class="px-1 py-3.5 text-left text-sm font-semibold text-gray-900">Current Title(s)</th>
                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Fighter</th>
-                <th scope="col" class="px-1 py-3.5 text-center text-sm font-semibold text-gray-900">TM</th>
                 <th scope="col" class="px-1 py-3.5 text-center text-sm font-semibold text-gray-900">Record</th>
                 <th scope="col" class="px-1 py-3.5 text-center text-sm font-semibold text-gray-900">Win Pct</th>
+                <th scope="col" class="px-1 py-3.5 text-center text-sm font-semibold text-gray-900">TM</th>
                 <th scope="col" class="px-1 py-3.5 text-center text-sm font-semibold text-gray-900">Lvl Pts</th>
                 <th scope="col" class="px-1 py-3.5 text-center text-sm font-semibold text-gray-900">Trn Pts</th>
                 <th scope="col" class="px-1 py-3.5 text-left text-sm font-semibold text-gray-900">Last Opponent</th>
@@ -69,9 +69,9 @@
                 <% end %>
 
                 <td class="whitespace-nowrap py-2 pl-4 pr-3 text-left text-sm font-medium text-gray-900 sm:pl-0"><%= link_to fighter.name, fighter_url(fighter), class: "text-blue-500 hover:underline" %></td>
-                <td class="whitespace-nowrap py-2 pl-4 text-center text-sm text-gray-500"><%= fighter.total_matches %></td>
                 <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.wins %> - <%= fighter.losses %> - <%= fighter.draws %> (<%= fighter.knockouts %> KOs)</td>
                 <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= number_with_precision(fighter.winning_percentage, precision: 3).sub(/^0/, '') %></td>
+                <td class="whitespace-nowrap py-2 pl-4 text-center text-sm text-gray-500"><%= fighter.total_matches %></td>
                 <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.level_points %></td>
                 <td class="whitespace-nowrap px-1 py-2 text-center text-sm text-gray-500"><%= fighter.training_points %></td>
                 <% if last_opponent.nil? %>
